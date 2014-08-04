@@ -16,7 +16,7 @@ public class Player {
 		this.piece = piece;
 	}
 
-	public void dealCard(Card card) {
+	public void giveCard(Card card) {
 		cards.add(card);
 	}
 

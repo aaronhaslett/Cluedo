@@ -23,13 +23,15 @@ public class Game {
 	//private Board board; // not implemented yet
 	private List<Player> players;
 	private Solution murderInfo;
+	private CluedoWindow gameWindow;
 
 	public Game(){
 		players = new ArrayList<Player>();
 		players.add(new Player(new CharacterPiece(Character.MissScarlet)));
 		players.add(new Player(new CharacterPiece(Character.ProfPlum)));
+
+		gameWindow = new CluedoWindow();
 		setUpCards();
-		new CluedoWindow();
 	}
 
 
@@ -39,6 +41,7 @@ public class Game {
 	 */
 	private void setUpCards(){
 
+		// pick murderer, weapon and room
 		List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
 		List<WeaponCard> weaponCards = new ArrayList<WeaponCard>();
 		List<RoomCard> roomCards = new ArrayList<RoomCard>();
@@ -62,7 +65,7 @@ public class Game {
 
 		murderInfo = new Solution(murderer, murderRoom, murderWeapon);
 
-
+		// distribute cards
 		Set<Card> allCards = new HashSet<Card>();
 
 		allCards.addAll(characterCards);
@@ -84,7 +87,7 @@ public class Game {
 			    i = i + 1;
 			}
 
-			players.get(c%players.size()).dealCard(random);
+			players.get(c%players.size()).giveCard(random);
 			allCards.remove(random);
 		}
 
