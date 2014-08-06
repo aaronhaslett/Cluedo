@@ -15,7 +15,7 @@ public class WeaponCard extends Card{
 	}
 
 	public String toString(){
-		return this.getClass().getName() + " \"" + weapon.name() + "\"";
+		return this.getClass().getSimpleName() + " \"" + weapon.name() + "\"";
 	}
 
 	@Override

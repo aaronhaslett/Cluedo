@@ -10,7 +10,7 @@ public class CharacterCard extends Card{
 	}
 
 	public String toString(){
-		return this.getClass().getName() + " \"" + character.name() + "\"";
+		return this.getClass().getSimpleName() + " \"" + character.name() + "\"";
 	}
 
 	public Game.Character getCharacter(){

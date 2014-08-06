@@ -1,13 +1,13 @@
 package cluedo.card;
 
 
-public class Solution {
+public class MurderSolution {
 
 	private CharacterCard character;
 	private RoomCard room;
 	private WeaponCard weapon;
 
-	public Solution(CharacterCard character, RoomCard room, WeaponCard weapon) {
+	public MurderSolution(CharacterCard character, RoomCard room, WeaponCard weapon) {
 		super();
 		this.character = character;
 		this.room = room;
@@ -27,10 +27,10 @@ public class Solution {
 
 	@Override
 	public boolean equals(Object o){
-		if (!(o instanceof Solution)){
+		if (!(o instanceof MurderSolution)){
 			return false;
 		}
-		Solution s = (Solution) o;
+		MurderSolution s = (MurderSolution) o;
 
 		return s.getCharacter().equals(this.getCharacter())
 				&& s.getWeapon().equals(this.getWeapon())

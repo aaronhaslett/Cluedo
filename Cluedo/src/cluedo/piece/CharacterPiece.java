@@ -11,4 +11,8 @@ public class CharacterPiece implements Piece{
 		this.character = character;
 	}
 
+	public String toString(){
+		return character.name();
+	}
+
 }

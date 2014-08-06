@@ -25,6 +25,6 @@ public class Player {
 	}
 
 	public String toString(){
-		return this.getClass().getName() + " Piece: " + piece;
+		return this.getClass().getSimpleName() +" "+ piece;
 	}
 }

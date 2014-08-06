@@ -1,6 +1,8 @@
 package cluedo.game;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -8,10 +10,9 @@ import java.util.Set;
 import cluedo.card.Card;
 import cluedo.card.CharacterCard;
 import cluedo.card.RoomCard;
-import cluedo.card.Solution;
+import cluedo.card.MurderSolution;
 import cluedo.card.WeaponCard;
 import cluedo.gui.CluedoWindow;
-import cluedo.piece.CharacterPiece;
 
 
 public class Game {
@@ -21,16 +22,14 @@ public class Game {
 	public static enum Room {Kitchen, Ballroom, Conversatory, BilliardRoom, Library, Study, Hall, Lounge, DiningRoom};
 
 	//private Board board; // not implemented yet
-	private List<Player> players;
-	private Solution murderInfo;
+	private Set<Player> players;
+	private MurderSolution murder;
 	private CluedoWindow gameWindow;
 
 	public Game(){
-		players = new ArrayList<Player>();
-		players.add(new Player(new CharacterPiece(Character.MissScarlet)));
-		players.add(new Player(new CharacterPiece(Character.ProfPlum)));
-
-		gameWindow = new CluedoWindow();
+		players = new HashSet<Player>();
+		gameWindow = new CluedoWindow(this);
+		System.out.println(Arrays.toString(players.toArray()));
 		setUpCards();
 	}
 
@@ -63,7 +62,7 @@ public class Game {
 		weaponCards.remove(murderWeapon);
 		roomCards.remove(murderRoom);
 
-		murderInfo = new Solution(murderer, murderRoom, murderWeapon);
+		murder = new MurderSolution(murderer, murderRoom, murderWeapon);
 
 		// distribute cards
 		Set<Card> allCards = new HashSet<Card>();
@@ -75,25 +74,48 @@ public class Game {
 		assert allCards.size() == 21-3; // all cards minus 3 for solution.
 
 		// deal cards!
-		for (int c = 0; !allCards.isEmpty(); c++){
+
+		for (Iterator<Player> it = players.iterator(); !allCards.isEmpty();){
 			// way of getting random elements from a set
 			int item = new Random().nextInt(allCards.size());
 
 			int i = 0;
 			Card random = null;
 			for(Card card : allCards){
-			    if (i == item)
+			    if (i == item){
 			        random = card;
+			    }
 			    i = i + 1;
 			}
 
-			players.get(c%players.size()).giveCard(random);
+			//players.get(c%players.size()).giveCard(random);
+			// THIS MAY NOT WORK
+			if (!it.hasNext()){
+				it = players.iterator();
+			}
+			it.next().giveCard(random);
 			allCards.remove(random);
+		}
+
+		for (Player p : players){
+			System.out.println(Arrays.toString(p.getCards().toArray()));
 		}
 
 	}
 
-	private boolean isSolutionCorrect(Solution s){
-		return murderInfo.equals(s);
+	private boolean isAccusationCorrect(MurderSolution s){
+		return murder.equals(s);
+	}
+
+	/**
+	 * Adds a player to the game.
+	 * @param p
+	 */
+	public void addPlayer(Player p){
+		this.players.add(p);
+	}
+
+	public int getNoOfPlayers(){
+		return players.size();
 	}
 }

@@ -15,7 +15,7 @@ public class RoomCard extends Card{
 	}
 
 	public String toString(){
-		return this.getClass().getName() + " \"" + room.name() + "\"";
+		return this.getClass().getSimpleName() + " \"" + room.name() + "\"";
 	}
 
 	@Override
