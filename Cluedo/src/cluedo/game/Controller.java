@@ -243,7 +243,9 @@ public class Controller {
 				cardsPanel.add(roomLabel);
 				accusationPanel.add(cardsPanel, BorderLayout.NORTH);
 				
+				// displays whether the user can refute or not
 				JLabel result = new JLabel();
+				accusationPanel.add(result);
 				
 				Set<Card> matchingCards = accusation.whichCardsMatch(currentPlayer.getCards());
 				
