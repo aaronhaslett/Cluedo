@@ -22,14 +22,14 @@ public class PlayerUIPanel extends JPanel{
 	private Player currentPlayer;
 
 	public PlayerUIPanel(){
-		setPreferredSize(new Dimension(CluedoWindow.WINDOW_SIZE.width, 200));
+		setPreferredSize(new Dimension(Window.WINDOW_SIZE.width, 200));
 	}
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		if (currentPlayer == null) return; // if no player is selected, don't draw anything
 
-		final int CARD_REGION_LEFT = CluedoWindow.WINDOW_SIZE.width/2;
+		final int CARD_REGION_LEFT = Window.WINDOW_SIZE.width/2;
 
 		// draws cards
 		int cardNumber = 0;

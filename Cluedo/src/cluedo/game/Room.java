@@ -73,13 +73,5 @@ public class Room extends BoardObject{
 	public Rectangle[] getRectangles(){
 		return rectangles;
 
-	public class Warp{
-		int[] coords;
-		Room destination;
-
-		public Warp(int[] coords, Room destination){
-			this.coords = coords;
-			this.destination = destination;
-		}
 	}
 }

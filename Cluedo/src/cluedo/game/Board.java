@@ -34,14 +34,9 @@ public class Board{
 								new Door[]{ new Door(new int[]{9,4}, "W"),
 											new Door(new int[]{11,6}, "S"),
 										    new Door(new int[]{12,6}, "S")});
-	private static Room lounge = new Room("Lounge", 
+	private static Room lounge = new Room("Lounge",
 								new int[][][]{{{17,0},{23,5}}},
 								new Door[]{ new Door(new int[]{17,5}, "S")});
-	private static Room library = new Room("Library",
-								new int[][]{{9,4},{11,6},{12,6}});
-	public static Room lounge = new Room("Lounge",
-								new int[][][]{{{17,0},{24,5}}},
-								new int[][]{{17,5}});
 	public static Room library = new Room("Library",
 								new int[][][]{{{0,6},{5,10}}, {{6,7},{6,9}}},
 								new Door[]{ new Door(new int[]{3,10}, "S"),
@@ -119,7 +114,7 @@ public class Board{
 				}
 			}
 		};
-				
+
 		JFrame frame = new JFrame("Cluedo");
 		int windowSize = squareSize*board.boardSize;
 		frame.setSize(windowSize+5,windowSize+25);

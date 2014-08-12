@@ -1,6 +1,5 @@
-package cluedo.gui;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+package cluedo.game;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -9,64 +8,22 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import cluedo.game.Game;
-import cluedo.game.Player;
+import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
 
+public class Controller {
 
-public class CluedoWindow extends JFrame{
+	private Game game;
+	private Window window;
 
-	private CluedoBoard board;
-	private PlayerUIPanel playerUI;
-	private JMenuBar menuBar;
-	private Game game; // TODO: reduce coupling
-
-	private final String EXIT_CONFIRM = "Are you sure that you want to exit the best cluedo implementation known?";
-	public static final Dimension WINDOW_SIZE = new Dimension(700,700);
-
-	/**
-	 * @param game - game of cluedo
-	 * sets up menu, exit button and starts player select.
-	 */
-	public CluedoWindow(){
-		super("Cluedo");
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(WINDOW_SIZE);
-		setLocation(500, 200); // location on screen that the game starts at.
-		setLayout(new BorderLayout());
-
-		board = new CluedoBoard();
-		playerUI = new PlayerUIPanel();
-		menuBar = new JMenuBar();
-		//menuBar.add(menu);
-
-		// Exit game button
-		JMenuItem exit = new JMenuItem("Exit game");
-		exit.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
-				int response = JOptionPane.showConfirmDialog(CluedoWindow.this, EXIT_CONFIRM, "Serious?", JOptionPane.YES_NO_OPTION);
-				if (response == 0){
-					System.exit(0);
-				}
-			}
-		});
-		menuBar.add(exit);
-
-		setJMenuBar(menuBar);
-		add(board, BorderLayout.CENTER);
-		add(playerUI, BorderLayout.SOUTH);
-		setVisible(true);
-
-		List<Player> players = playerSelect();
-		this.game = new Game(players);
+	public Controller(){
+		game = new Game(playerSelect());
+		window = new Window();
 	}
 
 	/**
@@ -102,7 +59,7 @@ public class CluedoWindow extends JFrame{
 		// each user picks their character
 		while (playerState != DONE_SELECTING){
 			chooseText.setText("Pick character for player: "+players.size());
-			playerState = JOptionPane.showOptionDialog(this, panel,
+			playerState = JOptionPane.showOptionDialog(null, panel,
 				    "Radio Test", JOptionPane.YES_NO_OPTION,
 				    JOptionPane.QUESTION_MESSAGE, null, new String[]{"next", "done"} , null);
 			if (playerState == DONE_SELECTING){
@@ -150,4 +107,17 @@ public class CluedoWindow extends JFrame{
 		JOptionPane.showMessageDialog(null,
 				message, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+	public class ExitButtonListener {
+		
+		public void actionPerformed(ActionEvent e){
+			int response = JOptionPane.showConfirmDialog(null, EXIT_CONFIRM, "Serious?", JOptionPane.YES_NO_OPTION);
+			if (response == 0){
+				System.exit(0);
+			}
+		}
+			
+	
+	}
+
 }
