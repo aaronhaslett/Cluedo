@@ -1,7 +1,7 @@
 package cluedo.gui;
-import java.awt.Canvas;
-import java.awt.Dimension;
 import java.awt.Graphics;
+
+import javax.swing.JPanel;
 
 
 /**
@@ -9,7 +9,7 @@ import java.awt.Graphics;
  * GUI for the cluedo game board
  *
  */
-public class CluedoBoard extends Canvas{
+public class CluedoBoard extends JPanel{
 
 
 	public CluedoBoard(){
@@ -17,6 +17,7 @@ public class CluedoBoard extends Canvas{
 	}
 
 	public void paintComponent(Graphics g){
+		super.paintComponent(g);
 		g.drawString("Board", 200, 300);
 	}
 }

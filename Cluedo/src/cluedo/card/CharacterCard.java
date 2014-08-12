@@ -25,4 +25,5 @@ public class CharacterCard extends Card{
 		return this.getCharacter() == ((CharacterCard)o).getCharacter();
 	}
 
+
 }

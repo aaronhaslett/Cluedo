@@ -16,6 +16,10 @@ public class Player {
 		this.piece = piece;
 	}
 
+	/**
+	 * Gives a card to the player.
+	 * @param card
+	 */
 	public void giveCard(Card card) {
 		cards.add(card);
 	}
@@ -27,4 +31,9 @@ public class Player {
 	public String toString(){
 		return this.getClass().getSimpleName() +" "+ piece;
 	}
+
+	public CharacterPiece getCharacter(){
+		return piece;
+	}
+
 }

@@ -1,12 +1,4 @@
-class Warp{
-	int[] coords;
-	Room destination;
-
-	public Warp(int[] coords, Room destination){
-		this.coords = coords;
-		this.destination = destination;
-	}
-}
+package cluedo.game;
 
 public class Room{
 	private String name;
@@ -29,5 +21,15 @@ public class Room{
 
 	public void setWarp(int[] coords, Room destination){
 		this.warp = new Warp(coords, destination);
+	}
+
+	public class Warp{
+		int[] coords;
+		Room destination;
+
+		public Warp(int[] coords, Room destination){
+			this.coords = coords;
+			this.destination = destination;
+		}
 	}
 }

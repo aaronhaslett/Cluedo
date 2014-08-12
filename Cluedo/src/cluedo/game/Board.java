@@ -1,3 +1,4 @@
+package cluedo.game;
 
 public class Board{
 
@@ -10,7 +11,7 @@ public class Board{
 	public static Room hall = new Room("Hall",
 								new int[][][]{{{9,0},{14,6}}},
 								new int[][]{{9,4},{11,6},{12,6}});
-	public static Room lounge = new Room("Lounge", 
+	public static Room lounge = new Room("Lounge",
 								new int[][][]{{{17,0},{24,5}}},
 								new int[][]{{17,5}});
 	public static Room library = new Room("Library",
