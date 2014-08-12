@@ -1,18 +1,59 @@
 package cluedo.game;
+<<<<<<< HEAD
 
-public class Room{
+import java.awt.Rectangle;
+
+class BoardObject{}
+
+class Warp extends BoardObject{
+
+	public int[] coords;
+	public Room destination;
+
+	public Warp(int[] coords, Room destination){
+		this.coords = coords;
+		this.destination = destination;
+	}
+}
+=======
+>>>>>>> b913bb2da5454996fad521eda97e2b8b2bff2e28
+
+class Door extends BoardObject{
+	public int[] coords;
+	public Room room;
+	public String facing;
+
+	public Door(int[] coords, String facing){
+		this.coords = coords;
+		this.facing = facing;
+	}
+}
+
+public class Room extends BoardObject{
 	private String name;
 	//private WeaponPiece[] weaponPieces;
 	//private CharacterPiece[] characterPieces;
 
-	public int[][][] geometry;
-	public int[][] doors;
+	private Rectangle[] rectangles;
+	public Door[] doors;
 	public Warp warp;
+	public Player player;
 
-	public Room(String name, int[][][] geometry, int[][] doors){
+	public Room(String name, int[][][] geometry, Door[] doors){
 		this.name = name;
-		this.geometry = geometry;
+
+		this.rectangles = new Rectangle[geometry.length];
+		int[][] rect = new int[2][2];
+		for(int i=0; i<geometry.length; i++){
+			rect = geometry[i];
+			rectangles[i] = new Rectangle(rect[0][0], 				rect[0][1],
+										  rect[1][0]-rect[0][0]+1,  rect[1][1]-rect[0][1]+1);
+		}
+
 		this.doors = doors;
+		for(Door door: doors){
+			door.room = this;
+		}
 	}
 
 	public String getName(){
@@ -23,6 +64,19 @@ public class Room{
 		this.warp = new Warp(coords, destination);
 	}
 
+<<<<<<< HEAD
+	public boolean contains(int[] point){
+		for(Rectangle rect : rectangles){
+			if(rect.contains(point[0], point[1])){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Rectangle[] getRectangles(){
+		return rectangles;
+=======
 	public class Warp{
 		int[] coords;
 		Room destination;
@@ -31,5 +85,6 @@ public class Room{
 			this.coords = coords;
 			this.destination = destination;
 		}
+>>>>>>> b913bb2da5454996fad521eda97e2b8b2bff2e28
 	}
 }
