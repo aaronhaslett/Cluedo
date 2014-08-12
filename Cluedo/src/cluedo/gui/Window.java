@@ -13,7 +13,7 @@ import cluedo.game.Player;
 
 public class Window extends JFrame{
 
-	private CluedoBoard board;
+	private BoardPanel board;
 	private PlayerUIPanel playerUI;
 	private JMenuBar menuBar;
 
@@ -30,7 +30,7 @@ public class Window extends JFrame{
 		setLocation(500, 200); // location on screen that the game starts at.
 		setLayout(new BorderLayout());
 
-		board = new CluedoBoard(control);
+		board = new BoardPanel(control);
 		playerUI = new PlayerUIPanel(control);
 		menuBar = new JMenuBar();
 		//menuBar.add(menu);

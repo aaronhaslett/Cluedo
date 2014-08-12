@@ -13,11 +13,11 @@ import cluedo.game.*;
  * View for the cluedo game board
  *
  */
-public class CluedoBoard extends JPanel{
+public class BoardPanel extends JPanel{
 
 	private BoardObject[][] board;
 
-	public CluedoBoard(Controller control){
+	public BoardPanel(Controller control){
 		addMouseListener(control.new BoardMouseListener());
 	}
 
