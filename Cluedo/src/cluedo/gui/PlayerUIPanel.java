@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import cluedo.card.Card;
 import cluedo.game.Controller;
 import cluedo.game.Player;
+import cluedo.game.Controller.AccusationButtonListener;
 
 /**
  * UI for
@@ -32,12 +33,15 @@ public class PlayerUIPanel extends JPanel{
 		setBackground(Color.MAGENTA);
 
 		JPanel buttonPanel = new JPanel();
-		JButton endTurnButton = new JButton("End turn");
-
 		buttonPanel.setLayout(new FlowLayout());
+
+		JButton endTurnButton = new JButton("End turn");
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
 		buttonPanel.add(endTurnButton);
 		add(buttonPanel, BorderLayout.WEST);
+
+		JButton accusation = new JButton("Make accusation");
+		accusation.addActionListener(control.new AccusationButtonListener());
 	}
 
 	public void paintComponent(Graphics g){

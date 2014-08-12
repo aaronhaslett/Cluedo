@@ -27,17 +27,14 @@ public class Controller {
 
 	public Controller(){
 		window = new Window(this);
-		game = new Game(playerSelect());
 		board = new Board();
+		window.updateBoard(board.getBoardTiles());
+		window.repaint();
+
+		game = new Game(playerSelect());
 
 		window.updatePlayerTurn(game.getWhoseTurn());
 		window.updateBoard(board.getBoardTiles());
-		window.repaint();
-	}
-
-	private void nextTurn(){
-		game.nextTurn();
-		window.updatePlayerTurn(game.getWhoseTurn());
 		window.repaint();
 	}
 
@@ -77,6 +74,7 @@ public class Controller {
 				    "Radio Test", JOptionPane.YES_NO_OPTION,
 				    JOptionPane.QUESTION_MESSAGE, null, new String[]{"next", "done"} , null);
 			if (playerState == DONE_SELECTING){
+				
 				// doesn't allow < 2 players
 				if (players.size() < 2){
 					displayErrorBox("Not enough players yet!", "Oi");
@@ -173,7 +171,20 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			nextTurn();
+			// give next player the turn, update graphics
+			game.nextTurn();
+			window.updatePlayerTurn(game.getWhoseTurn());
+			window.repaint();
+		}
+
+	}
+	
+	public class AccusationButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// make accusation popup
+			
 		}
 
 	}

@@ -17,7 +17,7 @@ public class Window extends JFrame{
 	private PlayerUIPanel playerUI;
 	private JMenuBar menuBar;
 
-	public static final Dimension WINDOW_SIZE = new Dimension(700,700);
+	public static final Dimension WINDOW_SIZE = new Dimension(850,850);
 
 	/**
 	 * @param game - game of cluedo

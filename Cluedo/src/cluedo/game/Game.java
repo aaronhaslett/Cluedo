@@ -110,11 +110,16 @@ public class Game {
 	}
 
 	/**
-	 * Sets the player to the lefts turn
+	 * Sets the player to the lefts' turn
 	 */
 	public void nextTurn(){
-		turn = players.get((players.indexOf(turn)+1)%players.size());
+		turn = playerToLeft(turn);
 	}
+
+	private Player playerToLeft(Player p) {
+		return players.get((players.indexOf(p)+1)%players.size());
+	}
+
 
 	public Player getWhoseTurn(){
 		return turn;
