@@ -113,10 +113,10 @@ public class Game {
 	 * Sets the player to the lefts' turn
 	 */
 	public void nextTurn(){
-		turn = playerToLeft(turn);
+		turn = getPlayerToLeft(turn);
 	}
 
-	private Player playerToLeft(Player p) {
+	public Player getPlayerToLeft(Player p) {
 		return players.get((players.indexOf(p)+1)%players.size());
 	}
 
@@ -133,6 +133,10 @@ public class Game {
 
 	public int getDiceValue(){
 		return diceValue;
+	}
+	
+	public int getNumberOfPlayers(){
+		return players.size();
 	}
 
 }

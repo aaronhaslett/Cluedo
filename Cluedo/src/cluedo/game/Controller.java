@@ -1,21 +1,30 @@
 package cluedo.game;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import cluedo.board.Board;
+import cluedo.card.Card;
+import cluedo.card.CharacterCard;
+import cluedo.card.MurderSolution;
+import cluedo.card.RoomCard;
+import cluedo.card.WeaponCard;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
 
@@ -50,6 +59,7 @@ public class Controller {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		ButtonGroup buttongroup = new ButtonGroup();
 		JRadioButton[] buttons = new JRadioButton[6];
+		
 
 		List<Player> players = new ArrayList<Player>();
 
@@ -62,6 +72,9 @@ public class Controller {
 			buttons[c.ordinal()] = button;
 			panel.add(button);
 		}
+				
+		// initialise first button to be selected
+		buttons[0].setSelected(true);
 
 		final int STILL_SELECTING = 0;
 		final int DONE_SELECTING = 1;
@@ -184,7 +197,86 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// make accusation popup
+			final String TITLE = "so how did the murder happen?";
+			JPanel optionPanel = new JPanel();
+			optionPanel.setLayout(new FlowLayout());
 			
+			JComboBox<Game.Character> murdererSelect = new JComboBox<Game.Character>(Game.Character.values());
+			JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
+			JComboBox<Game.Room> roomSelect = new JComboBox<Game.Room>(Game.Room.values());
+			
+			optionPanel.add(murdererSelect);
+			optionPanel.add(weaponSelect);
+			optionPanel.add(roomSelect);
+			
+			// popup box requesting murder details
+			int confirmResponse = JOptionPane.showConfirmDialog(null, optionPanel, TITLE, JOptionPane.OK_CANCEL_OPTION);
+			
+			if (confirmResponse == JOptionPane.CANCEL_OPTION){
+				return; // no accusations will be made here today.
+			}
+			// TODO: confirm again
+			// else proceed with accusation
+			MurderSolution accusation = new MurderSolution(new CharacterCard((Game.Character)murdererSelect.getSelectedItem()),
+					new RoomCard((Game.Room)roomSelect.getSelectedItem()),
+					new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
+			
+			System.out.println(accusation);
+			
+			Player currentPlayer = game.getWhoseTurn();
+			// move through players to the left
+			// asking them to refute the accusation
+			for (int i = 0; i < game.getNumberOfPlayers(); i++){
+				currentPlayer = game.getPlayerToLeft(currentPlayer);
+				
+				final String ACCUSATION_CONFIRM_TITLE = currentPlayer.getCharacter().toString()+", can you refute this accusation?";
+				JPanel accusationPanel = new JPanel();
+				accusationPanel.setLayout(new BorderLayout());
+				
+				JPanel cardsPanel = new JPanel();
+				cardsPanel.setLayout(new FlowLayout());
+				JLabel characterLabel = new JLabel(accusation.getCharacter().toString());
+				JLabel weaponLabel = new JLabel(accusation.getWeapon().toString());
+				JLabel roomLabel = new JLabel(accusation.getRoom().toString());
+				cardsPanel.add(characterLabel);
+				cardsPanel.add(weaponLabel);
+				cardsPanel.add(roomLabel);
+				accusationPanel.add(cardsPanel, BorderLayout.NORTH);
+				
+				JLabel result = new JLabel();
+				
+				Set<Card> matchingCards = accusation.whichCardsMatch(currentPlayer.getCards());
+				
+				if (!matchingCards.isEmpty()){
+					// player has card/s to refute the accusation
+					result.setText("You can refute this accusation");
+					// notify player of card/s they have to refute the accusation
+					for (Card match : matchingCards){
+						JLabel toEdit = null;
+						if (match instanceof CharacterCard){
+							toEdit = characterLabel;
+						}
+						if (match instanceof WeaponCard){
+							toEdit = weaponLabel;
+						}
+						if (match instanceof RoomCard){
+							toEdit = roomLabel;
+						}
+						final String OWNERSHIP_NOTIFY = "\n<YOU HAVE>";
+						toEdit.setText(toEdit.getText()+OWNERSHIP_NOTIFY);
+					}
+					JOptionPane.showMessageDialog(null, accusationPanel, ACCUSATION_CONFIRM_TITLE, JOptionPane.OK_OPTION);
+					return; // end accusation TODO: remove player from game
+				}
+				else {
+					// player has no cards to refute the accusation
+					result.setText("You cannot refute this accusation");
+					JOptionPane.showMessageDialog(null, accusationPanel, ACCUSATION_CONFIRM_TITLE, JOptionPane.OK_OPTION);
+					// continue the accusation confirmation
+				}
+			}
+			final String victoryMessage = "Accusation was correct! "+game.getWhoseTurn()+" has won!";
+			JOptionPane.showMessageDialog(null, victoryMessage);
 		}
 
 	}

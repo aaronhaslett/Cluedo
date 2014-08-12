@@ -20,7 +20,7 @@ public class WeaponCard extends Card{
 
 	@Override
 	public boolean equals(Object o){
-		if ((o instanceof WeaponCard)){
+		if (!(o instanceof WeaponCard)){
 			return false;
 		}
 		return this.getWeapon() == ((WeaponCard)o).getWeapon();

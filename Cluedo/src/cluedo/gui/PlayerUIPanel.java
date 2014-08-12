@@ -38,10 +38,13 @@ public class PlayerUIPanel extends JPanel{
 		JButton endTurnButton = new JButton("End turn");
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
 		buttonPanel.add(endTurnButton);
+		JButton accusationButton = new JButton("Make accusation");
+		accusationButton.addActionListener(control.new AccusationButtonListener());
+		buttonPanel.add(accusationButton);
+		
 		add(buttonPanel, BorderLayout.WEST);
 
-		JButton accusation = new JButton("Make accusation");
-		accusation.addActionListener(control.new AccusationButtonListener());
+		
 	}
 
 	public void paintComponent(Graphics g){
