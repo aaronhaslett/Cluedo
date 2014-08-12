@@ -1,5 +1,4 @@
 package cluedo.game;
-<<<<<<< HEAD
 
 import java.awt.Rectangle;
 
@@ -15,8 +14,6 @@ class Warp extends BoardObject{
 		this.destination = destination;
 	}
 }
-=======
->>>>>>> b913bb2da5454996fad521eda97e2b8b2bff2e28
 
 class Door extends BoardObject{
 	public int[] coords;
@@ -64,7 +61,6 @@ public class Room extends BoardObject{
 		this.warp = new Warp(coords, destination);
 	}
 
-<<<<<<< HEAD
 	public boolean contains(int[] point){
 		for(Rectangle rect : rectangles){
 			if(rect.contains(point[0], point[1])){
@@ -76,7 +72,7 @@ public class Room extends BoardObject{
 
 	public Rectangle[] getRectangles(){
 		return rectangles;
-=======
+
 	public class Warp{
 		int[] coords;
 		Room destination;
@@ -85,6 +81,5 @@ public class Room extends BoardObject{
 			this.coords = coords;
 			this.destination = destination;
 		}
->>>>>>> b913bb2da5454996fad521eda97e2b8b2bff2e28
 	}
 }
