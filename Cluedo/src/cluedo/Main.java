@@ -1,5 +1,6 @@
 package cluedo;
 
+import cluedo.game.Controller;
 import cluedo.game.Game;
 import cluedo.gui.Window;
 

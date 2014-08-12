@@ -25,7 +25,6 @@ public class Game {
 	private Set<CluedoRoom> rooms;
 	private Set<CluedoWeapon> weapons;*/ // SOON
 
-	//private Board board; // not implemented yet
 	private List<Player> players;
 	private MurderSolution murder;
 	private Player turn;
@@ -116,7 +115,7 @@ public class Game {
 		turn = players.get((players.indexOf(turn)+1)%players.size());
 	}
 
-	public Player getWhosTurn(){
+	public Player getWhoseTurn(){
 		return turn;
 	}
 

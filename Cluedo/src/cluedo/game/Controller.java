@@ -2,6 +2,8 @@ package cluedo.game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,17 +15,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import cluedo.board.Board;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
 
 public class Controller {
 
 	private Game game;
+	private Board board;
 	private Window window;
 
 	public Controller(){
+		window = new Window(this);
 		game = new Game(playerSelect());
-		window = new Window();
+		board = new Board();
 	}
 
 	/**
@@ -107,17 +112,63 @@ public class Controller {
 		JOptionPane.showMessageDialog(null,
 				message, title, JOptionPane.ERROR_MESSAGE);
 	}
-	
-	public class ExitButtonListener {
-		
+
+	public class ExitButtonListener implements ActionListener{
+
+		private final String EXIT_CONFIRM = "Are you sure that you want to exit the best cluedo implementation known?";
+		private final String CONFIRM_TITLE = "Serious?";
+
 		public void actionPerformed(ActionEvent e){
-			int response = JOptionPane.showConfirmDialog(null, EXIT_CONFIRM, "Serious?", JOptionPane.YES_NO_OPTION);
+			int response = JOptionPane.showConfirmDialog(null, EXIT_CONFIRM, CONFIRM_TITLE, JOptionPane.YES_NO_OPTION);
 			if (response == 0){
 				System.exit(0);
 			}
 		}
-			
-	
+	}
+
+	public class BoardMouseListener implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	public class EndTurnButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			game.nextTurn();
+			window.updatePlayerTurn(game.getWhoseTurn());
+			window.repaint();
+		}
+
 	}
 
 }

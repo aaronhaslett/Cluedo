@@ -1,29 +1,19 @@
-package cluedo.game;
+package cluedo.board;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseEvent;
-
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.text.JTextComponent;
-
 import java.awt.Rectangle;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 
 public class Board{
 
-	public static final int boardSize = 24;
+	public static final int SQUARE_SIZE = 30;
+	public static final int SIZE = 24;
+
 	//The whole board.  Null is an empty square.
-	public static BoardObject[][] board = new BoardObject[boardSize][boardSize];
+	public static BoardObject[][] board = new BoardObject[SIZE][SIZE];
 
 	//The rooms, the coordinates of rectangles making them up, and their doors.
 	private static Room study = new Room("Study",
@@ -91,24 +81,23 @@ public class Board{
 	//Some temporary GUI code for testing.
 	public static void main(String[] args){
 		final Board board = new Board();
-		final int squareSize = 30;
 
 		JComponent canvas = new JComponent(){
 			protected void paintComponent(Graphics g){
-				for(int y=0; y<boardSize; y++){
-					for(int x=0; x<boardSize; x++){
+				for(int y=0; y<SIZE; y++){
+					for(int x=0; x<SIZE; x++){
 						if(Board.board[y][x] == null){
 							g.setColor(Color.BLACK);
-							g.drawRect(x*squareSize, y*squareSize, squareSize, squareSize);
+							g.drawRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 						}else if(Board.board[y][x] instanceof Room){
 							g.setColor(Color.RED);
-							g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
+							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 						}else if(Board.board[y][x] instanceof Door){
 							g.setColor(Color.BLUE);
-							g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
+							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 						}else if(Board.board[y][x] instanceof Warp){
 							g.setColor(Color.ORANGE);
-							g.fillRect(x*squareSize, y*squareSize, squareSize, squareSize);
+							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 						}
 					}
 				}
@@ -116,7 +105,7 @@ public class Board{
 		};
 
 		JFrame frame = new JFrame("Cluedo");
-		int windowSize = squareSize*board.boardSize;
+		int windowSize = SQUARE_SIZE*board.SIZE;
 		frame.setSize(windowSize+5,windowSize+25);
 		frame.add(canvas);
 		frame.setVisible(true);

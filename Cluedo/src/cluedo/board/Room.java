@@ -1,32 +1,10 @@
-package cluedo.game;
+package cluedo.board;
 
 import java.awt.Rectangle;
 
-class BoardObject{}
+import cluedo.game.Player;
 
-class Warp extends BoardObject{
-
-	public int[] coords;
-	public Room destination;
-
-	public Warp(int[] coords, Room destination){
-		this.coords = coords;
-		this.destination = destination;
-	}
-}
-
-class Door extends BoardObject{
-	public int[] coords;
-	public Room room;
-	public String facing;
-
-	public Door(int[] coords, String facing){
-		this.coords = coords;
-		this.facing = facing;
-	}
-}
-
-public class Room extends BoardObject{
+public class Room implements BoardObject{
 	private String name;
 	//private WeaponPiece[] weaponPieces;
 	//private CharacterPiece[] characterPieces;

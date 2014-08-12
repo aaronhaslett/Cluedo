@@ -1,15 +1,14 @@
 package cluedo.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
+import cluedo.board.BoardObject;
 import cluedo.game.Controller;
+import cluedo.game.Player;
 
 
 public class Window extends JFrame{
@@ -18,7 +17,6 @@ public class Window extends JFrame{
 	private PlayerUIPanel playerUI;
 	private JMenuBar menuBar;
 
-	private final String EXIT_CONFIRM = "Are you sure that you want to exit the best cluedo implementation known?";
 	public static final Dimension WINDOW_SIZE = new Dimension(700,700);
 
 	/**
@@ -32,8 +30,8 @@ public class Window extends JFrame{
 		setLocation(500, 200); // location on screen that the game starts at.
 		setLayout(new BorderLayout());
 
-		board = new CluedoBoard();
-		playerUI = new PlayerUIPanel();
+		board = new CluedoBoard(control);
+		playerUI = new PlayerUIPanel(control);
 		menuBar = new JMenuBar();
 		//menuBar.add(menu);
 
@@ -48,5 +46,13 @@ public class Window extends JFrame{
 		setVisible(true);
 	}
 
+	public void updatePlayerTurn(Player p) {
+		playerUI.updatePlayerTurn(p);
+
+	}
+
+	public void updateBoard(BoardObject[][] b){
+		board.updateBoard(b);
+	}
 
 }

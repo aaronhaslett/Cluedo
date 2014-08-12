@@ -1,11 +1,16 @@
 package cluedo.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import cluedo.card.Card;
+import cluedo.game.Controller;
 import cluedo.game.Player;
 
 /**
@@ -21,13 +26,26 @@ public class PlayerUIPanel extends JPanel{
 
 	private Player currentPlayer;
 
-	public PlayerUIPanel(){
+	public PlayerUIPanel(Controller control){
 		setPreferredSize(new Dimension(Window.WINDOW_SIZE.width, 200));
+		setLayout(new BorderLayout());
+		setBackground(Color.MAGENTA);
+		
+		JPanel buttonPanel = new JPanel();
+		JButton endTurnButton = new JButton("End turn");
+		
+		buttonPanel.setLayout(new FlowLayout());
+		endTurnButton.addActionListener(control.new EndTurnButtonListener());
+		buttonPanel.add(endTurnButton);
+		add(buttonPanel, BorderLayout.WEST);
 	}
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
+
+		g.drawString("TESTTSOSHGP(*HWG", 100, 100);
 		if (currentPlayer == null) return; // if no player is selected, don't draw anything
+		
 
 		final int CARD_REGION_LEFT = Window.WINDOW_SIZE.width/2;
 
@@ -40,16 +58,13 @@ public class PlayerUIPanel extends JPanel{
 	}
 
 	/**
-	 * @param p: player whose turn it is.
-	 */
-	public void setCurrentPlayer(Player p){
-		this.currentPlayer = p;
-	}
-
-	/**
 	 *  depends on the player's character
 	 */
 	private void setBackgroundColour(){
 
+	}
+
+	public void updatePlayerTurn(Player p) {
+		currentPlayer = p;
 	}
 }
