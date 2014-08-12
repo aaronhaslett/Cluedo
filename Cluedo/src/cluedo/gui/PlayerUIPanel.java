@@ -30,10 +30,10 @@ public class PlayerUIPanel extends JPanel{
 		setPreferredSize(new Dimension(Window.WINDOW_SIZE.width, 200));
 		setLayout(new BorderLayout());
 		setBackground(Color.MAGENTA);
-		
+
 		JPanel buttonPanel = new JPanel();
 		JButton endTurnButton = new JButton("End turn");
-		
+
 		buttonPanel.setLayout(new FlowLayout());
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
 		buttonPanel.add(endTurnButton);
@@ -43,18 +43,21 @@ public class PlayerUIPanel extends JPanel{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
-		g.drawString("TESTTSOSHGP(*HWG", 100, 100);
 		if (currentPlayer == null) return; // if no player is selected, don't draw anything
-		
 
-		final int CARD_REGION_LEFT = Window.WINDOW_SIZE.width/2;
+		final int CARD_REGION_LEFT = 10;
 
 		// draws cards
 		int cardNumber = 0;
-		int cardWidth = 50;
+		int cardWidth = 150;
 		for (Card card : currentPlayer.getCards()){
-			g.drawString(card.toString(), CARD_REGION_LEFT + cardNumber*cardWidth, 0);
+			g.drawString(card.toString(), CARD_REGION_LEFT + cardNumber*cardWidth, 50);
+			cardNumber++;
 		}
+	}
+
+	public void updatePlayerTurn(Player p) {
+		currentPlayer = p;
 	}
 
 	/**
@@ -62,9 +65,5 @@ public class PlayerUIPanel extends JPanel{
 	 */
 	private void setBackgroundColour(){
 
-	}
-
-	public void updatePlayerTurn(Player p) {
-		currentPlayer = p;
 	}
 }

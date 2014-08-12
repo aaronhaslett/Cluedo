@@ -9,11 +9,11 @@ import javax.swing.JFrame;
 
 public class Board{
 
-	public static final int SQUARE_SIZE = 30;
+	public static final int SQUARE_SIZE = 20;
 	public static final int SIZE = 24;
 
 	//The whole board.  Null is an empty square.
-	public static BoardObject[][] board = new BoardObject[SIZE][SIZE];
+	private BoardObject[][] board = new BoardObject[SIZE][SIZE];
 
 	//The rooms, the coordinates of rectangles making them up, and their doors.
 	private static Room study = new Room("Study",
@@ -77,6 +77,9 @@ public class Board{
 			}
 		}
 	}
+	public BoardObject[][] getBoardTiles(){
+		return board;
+	}
 
 	//Some temporary GUI code for testing.
 	public static void main(String[] args){
@@ -86,16 +89,16 @@ public class Board{
 			protected void paintComponent(Graphics g){
 				for(int y=0; y<SIZE; y++){
 					for(int x=0; x<SIZE; x++){
-						if(Board.board[y][x] == null){
+						if(board.getBoardTiles()[y][x] == null){
 							g.setColor(Color.BLACK);
 							g.drawRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(Board.board[y][x] instanceof Room){
+						}else if(board.getBoardTiles()[y][x] instanceof Room){
 							g.setColor(Color.RED);
 							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(Board.board[y][x] instanceof Door){
+						}else if(board.getBoardTiles()[y][x] instanceof Door){
 							g.setColor(Color.BLUE);
 							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(Board.board[y][x] instanceof Warp){
+						}else if(board.getBoardTiles()[y][x] instanceof Warp){
 							g.setColor(Color.ORANGE);
 							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 						}

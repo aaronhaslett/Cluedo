@@ -29,6 +29,8 @@ public class Game {
 	private MurderSolution murder;
 	private Player turn;
 
+	private int diceValue;
+
 	public Game(List<Player> players){
 		this.players = players;
 		setUpCards();
@@ -43,7 +45,7 @@ public class Game {
 	 */
 	private void setUpCards(){
 
-		// pick murderer, weapon and room
+		// set up card collections
 		List<CharacterCard> characterCards = new ArrayList<CharacterCard>();
 		List<WeaponCard> weaponCards = new ArrayList<WeaponCard>();
 		List<RoomCard> roomCards = new ArrayList<RoomCard>();
@@ -58,14 +60,17 @@ public class Game {
 			roomCards.add(new RoomCard(Room.values()[i]));
 		}
 
+		// pick murderer, weapon and room
 		CharacterCard murderer = characterCards.get((int) (characterCards.size()*Math.random()));
 		WeaponCard murderWeapon = weaponCards.get((int) (weaponCards.size()*Math.random()));
 		RoomCard murderRoom = roomCards.get((int) (roomCards.size()*Math.random()));
+
+		murder = new MurderSolution(murderer, murderRoom, murderWeapon);
+
+		// remove murder cards from deck
 		characterCards.remove(murderer);
 		weaponCards.remove(murderWeapon);
 		roomCards.remove(murderRoom);
-
-		murder = new MurderSolution(murderer, murderRoom, murderWeapon);
 
 		// distribute cards
 		Set<Card> allCards = new HashSet<Card>();
@@ -78,16 +83,16 @@ public class Game {
 
 		// deal cards to all players!
 		for (int i = 0; !allCards.isEmpty(); i++){
+
 			// way of getting random elements from a set
 			int item = new Random().nextInt(allCards.size());
-
 			int c = 0;
 			Card random = null;
 			for(Card card : allCards){
 			    if (c == item){
 			        random = card;
 			    }
-			    c = c + 1;
+			    c++;
 			}
 
 			players.get(i%players.size()).giveCard(random);
@@ -98,10 +103,6 @@ public class Game {
 
 	public void makeSuggestion(Player p, MurderSolution m){
 
-	}
-
-	private Player getPlayerToLeft(Player p){
-		return players.get((players.indexOf(p)+1)%players.size());
 	}
 
 	private boolean isAccusationCorrect(MurderSolution m){
@@ -119,10 +120,14 @@ public class Game {
 		return turn;
 	}
 
-	public int rollDice(){
+	public void rollDice(){
 		int d1 = (int)(Math.random()*6);
 		int d2 = (int)(Math.random()*6);
-		return d1 + d2;
+		diceValue = d1 + d2;
+	}
+
+	public int getDiceValue(){
+		return diceValue;
 	}
 
 }

@@ -29,6 +29,16 @@ public class Controller {
 		window = new Window(this);
 		game = new Game(playerSelect());
 		board = new Board();
+
+		window.updatePlayerTurn(game.getWhoseTurn());
+		window.updateBoard(board.getBoardTiles());
+		window.repaint();
+	}
+
+	private void nextTurn(){
+		game.nextTurn();
+		window.updatePlayerTurn(game.getWhoseTurn());
+		window.repaint();
 	}
 
 	/**
@@ -45,7 +55,6 @@ public class Controller {
 		JRadioButton[] buttons = new JRadioButton[6];
 
 		List<Player> players = new ArrayList<Player>();
-
 
 		// makes radio button for each character
 		for (Game.Character c : Game.Character.values()){
@@ -164,9 +173,7 @@ public class Controller {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			game.nextTurn();
-			window.updatePlayerTurn(game.getWhoseTurn());
-			window.repaint();
+			nextTurn();
 		}
 
 	}
