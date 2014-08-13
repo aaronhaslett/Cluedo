@@ -3,6 +3,9 @@ package cluedo;
 import java.io.File;
 
 import cluedo.game.Controller;
+import cluedo.game.*;
+import cluedo.board.*;
+import cluedo.gui.*;
 
 public class Main {
 
