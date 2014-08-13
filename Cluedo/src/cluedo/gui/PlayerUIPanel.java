@@ -56,7 +56,8 @@ public class PlayerUIPanel extends JPanel{
 
 		cardPanel = new JPanel();
 		cardPanel.setLayout(new FlowLayout());
-		add(cardPanel, BorderLayout.EAST);
+		//cardPanel.setPreferredSize(new Dimension((int)(Window.WINDOW_SIZE.width*0.6), (int)Window.WINDOW_SIZE.height/3));
+		add(cardPanel, BorderLayout.CENTER);
 
 	}
 
@@ -85,15 +86,9 @@ public class PlayerUIPanel extends JPanel{
 		Set<Card> playerCards = p.getCards();
 		final int CARD_WIDTH =  playerCards.size(); // TODO: scale image
 		for (Card card : p.getCards()){
-			cardPanel.add(new JLabel(new ImageIcon("Spanner.jpg")));
-			//cardPanel.add(new JLabel(new ImageIcon(card.getImage())));
+			//cardPanel.add(new JLabel(new ImageIcon("res/img/cards/weapon/Spanner.jpg"))); // test
+			cardPanel.add(new JLabel(new ImageIcon(card.getImagePath())));
 		}
 	}
 
-	/**
-	 *  depends on the player's character
-	 */
-	private void setBackgroundColour(){
-
-	}
 }

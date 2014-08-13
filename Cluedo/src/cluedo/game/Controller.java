@@ -51,6 +51,16 @@ public class Controller {
 	}
 
 	/**
+	 * The player to the left gets the turn.
+	 * View elements are updated.
+	 */
+	private void nextTurn() {
+		game.nextTurn();
+		window.updatePlayerTurn(game.getWhoseTurn());
+		window.repaint();
+	}
+
+	/**
 	 *  Prompts the users to select their character
 	 *  Stores the players in Game object
 	 *  > 1 players must be selected before exiting
@@ -339,9 +349,7 @@ public class Controller {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// give next player the turn, update graphics
-			game.nextTurn();
-			window.updatePlayerTurn(game.getWhoseTurn());
-			window.repaint();
+			nextTurn();
 		}
 
 	}

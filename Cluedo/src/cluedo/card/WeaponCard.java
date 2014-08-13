@@ -35,14 +35,7 @@ public class WeaponCard extends Card{
 	}
 
 	@Override
-	public Image getImage(){
-		BufferedImage image=null;
-		try{
-			image = ImageIO.read(new File(Main.CARD_IMAGE_PATH + weapon.name()+".jpg"));
-		} catch (IOException e){
-			System.out.println(Main.CARD_IMAGE_PATH + "weapon" + File.separator + weapon.name()+".jpg");
-			e.printStackTrace();
-		}
-		return image;
+	public String getImagePath(){
+		return Main.CARD_IMAGE_PATH + "weapon" + File.separator + weapon.name()+".jpg";
 	}
 }

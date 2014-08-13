@@ -17,7 +17,7 @@ public class Game {
 
 	public static enum Character {MissScarlet, ProfPlum, MrsPeacock, RevGreen, ColMustard, MrsWhite};
 	public static enum Weapon {CandleStick, Dagger, LeadPipe, Revolver, Rope, Spanner};
-	public static enum Room {Kitchen, Ballroom, Conversatory, BilliardRoom, Library, Study, Hall, Lounge, DiningRoom};
+	public static enum Room {Kitchen, BallRoom, Conservatory, BilliardRoom, Library, Study, Hall, Lounge, DiningRoom};
 
 	/*private Set<CluedoCharacter> characters;
 	private Set<CluedoRoom> rooms;

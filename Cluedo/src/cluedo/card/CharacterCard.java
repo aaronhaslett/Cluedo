@@ -34,15 +34,8 @@ public class CharacterCard extends Card{
 	}
 
 	@Override
-	public Image getImage(){
-		BufferedImage image=null;
-		try{
-			image = ImageIO.read(new File(Main.CARD_IMAGE_PATH + character.name()+".jpg"));
-		} catch (IOException e){
-			//System.out.println(Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg");
-			e.printStackTrace();
-		}
-		return image;
+	public String getImagePath(){
+		return Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg";
 	}
 
 }

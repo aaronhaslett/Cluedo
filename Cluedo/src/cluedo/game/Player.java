@@ -30,7 +30,7 @@ public class Player {
 	}
 
 	public String toString(){
-		return this.getClass().getSimpleName() +" "+ piece;
+		return piece.toString();
 	}
 
 	public CharacterPiece getCharacter(){

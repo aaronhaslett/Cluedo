@@ -34,18 +34,9 @@ public class RoomCard extends Card{
 		return this.room == ((RoomCard)o).getRoom();
 	}
 
-
 	@Override
-	public Image getImage(){
-		BufferedImage image=null;
-		try{
-			image = ImageIO.read(new File(Main.CARD_IMAGE_PATH + room.name()+".jpg"));
-
-		} catch (IOException e){
-			System.out.println(Main.CARD_IMAGE_PATH + "room" + File.separator + room.name()+".jpg");
-			e.printStackTrace();
-		}
-		return image;
+	public String getImagePath(){
+		return Main.CARD_IMAGE_PATH + "room" + File.separator + room.name()+".jpg";
 	}
 
 }
