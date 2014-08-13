@@ -3,6 +3,7 @@ import java.awt.Image;
 
 
 public abstract class Card {
-	private Image cardImage;
+
+	public abstract Image getImage();
 
 }

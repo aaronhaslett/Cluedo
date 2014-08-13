@@ -8,14 +8,12 @@ import java.util.Set;
 
 import cluedo.card.Card;
 import cluedo.card.CharacterCard;
-import cluedo.card.MurderSolution;
+import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 
 
 public class Game {
-
-	public static final String RES_PATH = "res"+File.separator;
 
 	public static enum Character {MissScarlet, ProfPlum, MrsPeacock, RevGreen, ColMustard, MrsWhite};
 	public static enum Weapon {CandleStick, Dagger, LeadPipe, Revolver, Rope, Spanner};
@@ -26,7 +24,7 @@ public class Game {
 	private Set<CluedoWeapon> weapons;*/ // SOON
 
 	private List<Player> players;
-	private MurderSolution murder;
+	private MurderHypothesis murder;
 	private Player turn;
 
 	private int diceValue;
@@ -65,7 +63,7 @@ public class Game {
 		WeaponCard murderWeapon = weaponCards.get((int) (weaponCards.size()*Math.random()));
 		RoomCard murderRoom = roomCards.get((int) (roomCards.size()*Math.random()));
 
-		murder = new MurderSolution(murderer, murderRoom, murderWeapon);
+		murder = new MurderHypothesis(murderer, murderRoom, murderWeapon);
 
 		// remove murder cards from deck
 		characterCards.remove(murderer);
@@ -101,11 +99,11 @@ public class Game {
 
 	}
 
-	public void makeSuggestion(Player p, MurderSolution m){
+	public void makeSuggestion(Player p, MurderHypothesis m){
 
 	}
 
-	private boolean isAccusationCorrect(MurderSolution m){
+	private boolean isAccusationCorrect(MurderHypothesis m){
 		return murder.equals(m);
 	}
 
@@ -134,7 +132,7 @@ public class Game {
 	public int getDiceValue(){
 		return diceValue;
 	}
-	
+
 	public int getNumberOfPlayers(){
 		return players.size();
 	}

@@ -1,4 +1,12 @@
 package cluedo.card;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import cluedo.Main;
 import cluedo.game.Game;
 
 
@@ -25,5 +33,16 @@ public class CharacterCard extends Card{
 		return this.getCharacter() == ((CharacterCard)o).getCharacter();
 	}
 
+	@Override
+	public Image getImage(){
+		BufferedImage image=null;
+		try{
+			image = ImageIO.read(new File(Main.CARD_IMAGE_PATH + character.name()+".jpg"));
+		} catch (IOException e){
+			//System.out.println(Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg");
+			e.printStackTrace();
+		}
+		return image;
+	}
 
 }

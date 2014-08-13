@@ -22,7 +22,7 @@ import javax.swing.JRadioButton;
 import cluedo.board.Board;
 import cluedo.card.Card;
 import cluedo.card.CharacterCard;
-import cluedo.card.MurderSolution;
+import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.gui.Window;
@@ -59,7 +59,7 @@ public class Controller {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		ButtonGroup buttongroup = new ButtonGroup();
 		JRadioButton[] buttons = new JRadioButton[6];
-		
+
 
 		List<Player> players = new ArrayList<Player>();
 
@@ -72,7 +72,7 @@ public class Controller {
 			buttons[c.ordinal()] = button;
 			panel.add(button);
 		}
-				
+
 		// initialise first button to be selected
 		buttons[0].setSelected(true);
 
@@ -87,7 +87,7 @@ public class Controller {
 				    "Radio Test", JOptionPane.YES_NO_OPTION,
 				    JOptionPane.QUESTION_MESSAGE, null, new String[]{"next", "done"} , null);
 			if (playerState == DONE_SELECTING){
-				
+
 				// doesn't allow < 2 players
 				if (players.size() < 2){
 					displayErrorBox("Not enough players yet!", "Oi");
@@ -131,6 +131,157 @@ public class Controller {
 	private void displayErrorBox(String message, String title){
 		JOptionPane.showMessageDialog(null,
 				message, title, JOptionPane.ERROR_MESSAGE);
+	}
+
+	/**
+	 * Makes dialog boxes to go through murder suggestion process.
+	 * @param p: player to make accusation
+	 */
+	/*private void makeSuggestion(Player player){
+		Player currentPlayer = game.getWhoseTurn();
+
+		//MurderSolution suggestion = selectHypothesis(ROOM_THE_PLAYER_IS_IN);
+
+		if (suggestion == null){
+			// player cancelled the accusation
+			return;
+		}
+		// else proceed with accusation
+
+		// test the hypothesis
+		String message = null;
+		if (testMurderHypothesis(currentPlayer, suggestion)){
+			message = "Suggestion was correct! "+player+" has won!";
+			// TODO: player wins the game, game ends.
+		}
+		else {
+			message = "Suggestion was incorrect! "+player+" has won!";
+		}
+
+		JOptionPane.showMessageDialog(null, message);
+	}*/
+
+	/**
+	 * Makes dialog boxes to go through accusation process.
+	 * @param p: player to make accusation
+	 */
+	private void makeAccusation(Player player){
+
+		MurderHypothesis accusation = selectHypothesis(null);
+
+		if (accusation == null){
+			// player cancelled the accusation
+			return;
+		}
+		// else proceed with accusation
+
+		// test the hypothesis
+		String message = null;
+		if (testMurderHypothesisValid(player, accusation)){
+			message = "Accusation was correct! "+player+" has won!";
+			// TODO: player wins the game, game ends.
+		}
+		else {
+			message = "Accusation was wrong!" + player+" is out of the game!";
+			// TODO: player is out of the game.
+		}
+
+		JOptionPane.showMessageDialog(null, message);
+	}
+
+	/**
+	 * @param room: restriction to one room or null if no room restriction
+	 * @return a MurderHypothesis containing the relevant cards
+	 */
+	private static MurderHypothesis selectHypothesis(Game.Room room){
+		final String TITLE = "so how did the murder happen?";
+		JPanel optionPanel = new JPanel();
+		optionPanel.setLayout(new FlowLayout());
+
+		JComboBox<Game.Character> murdererSelect = new JComboBox<Game.Character>(Game.Character.values());
+		JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
+		JComboBox<Game.Room> roomSelect = new JComboBox<Game.Room>(Game.Room.values());
+
+		if (room != null) {
+			//roomSelect. //TODO: limit room select to room parameter
+		}
+
+		optionPanel.add(murdererSelect);
+		optionPanel.add(weaponSelect);
+		optionPanel.add(roomSelect);
+
+		// popup box requesting murder details
+		int confirmResponse = JOptionPane.showConfirmDialog(null, optionPanel, TITLE, JOptionPane.OK_CANCEL_OPTION);
+
+		if (confirmResponse == JOptionPane.CANCEL_OPTION){
+			return null; // no accusations will be made here today.
+		}
+		// TODO: (maybe) confirm again
+		return new MurderHypothesis(new CharacterCard((Game.Character)murdererSelect.getSelectedItem()),
+				new RoomCard((Game.Room)roomSelect.getSelectedItem()),
+				new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
+	}
+
+	/**
+	 * Goes through all players to see if they can refute the hypothesis
+	 * @param hypothesiser
+	 * @param hypothesis
+	 * @return true if murder hypothesis is correct, false if not
+	 */
+	private boolean testMurderHypothesisValid(Player hypothesiser, MurderHypothesis hypothesis){
+
+		for (int i = 0; i < game.getNumberOfPlayers(); i++){
+			hypothesiser = game.getPlayerToLeft(hypothesiser);
+
+			final String HYPOT_CONFIRM_TITLE = hypothesiser.getCharacter().toString()+", can you refute this accusation?";
+			JPanel hypotPanel = new JPanel();
+			hypotPanel.setLayout(new BorderLayout());
+
+			JPanel cardsPanel = new JPanel();
+			cardsPanel.setLayout(new FlowLayout());
+			JLabel characterLabel = new JLabel(hypothesis.getCharacter().toString());
+			JLabel weaponLabel = new JLabel(hypothesis.getWeapon().toString());
+			JLabel roomLabel = new JLabel(hypothesis.getRoom().toString());
+			cardsPanel.add(characterLabel);
+			cardsPanel.add(weaponLabel);
+			cardsPanel.add(roomLabel);
+			hypotPanel.add(cardsPanel, BorderLayout.NORTH);
+
+			// displays whether the user can refute or not
+			JLabel result = new JLabel();
+			hypotPanel.add(result);
+
+			Set<Card> matchingCards = hypothesis.whichCardsMatch(hypothesiser.getCards());
+
+			if (!matchingCards.isEmpty()){
+				// player has card/s to refute the solution
+				result.setText("You can refute this solution");
+				// notify player of card/s they have to refute the solution
+				for (Card match : matchingCards){
+					JLabel toEdit = null;
+					if (match instanceof CharacterCard){
+						toEdit = characterLabel;
+					}
+					if (match instanceof WeaponCard){
+						toEdit = weaponLabel;
+					}
+					if (match instanceof RoomCard){
+						toEdit = roomLabel;
+					}
+					final String OWNERSHIP_NOTIFY = "\n<YOU HAVE>";
+					toEdit.setText(toEdit.getText()+OWNERSHIP_NOTIFY);
+				}
+				JOptionPane.showMessageDialog(null, hypotPanel, HYPOT_CONFIRM_TITLE, JOptionPane.OK_OPTION);
+				return false; // end
+			}
+			else {
+				// player has no cards to refute the solution
+				result.setText("You cannot refute this accusation");
+				JOptionPane.showMessageDialog(null, hypotPanel, HYPOT_CONFIRM_TITLE, JOptionPane.OK_OPTION);
+				// continue the accusation confirmation
+			}
+		}
+		return true;
 	}
 
 	public class ExitButtonListener implements ActionListener{
@@ -191,94 +342,12 @@ public class Controller {
 		}
 
 	}
-	
+
 	public class AccusationButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// make accusation popup
-			final String TITLE = "so how did the murder happen?";
-			JPanel optionPanel = new JPanel();
-			optionPanel.setLayout(new FlowLayout());
-			
-			JComboBox<Game.Character> murdererSelect = new JComboBox<Game.Character>(Game.Character.values());
-			JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
-			JComboBox<Game.Room> roomSelect = new JComboBox<Game.Room>(Game.Room.values());
-			
-			optionPanel.add(murdererSelect);
-			optionPanel.add(weaponSelect);
-			optionPanel.add(roomSelect);
-			
-			// popup box requesting murder details
-			int confirmResponse = JOptionPane.showConfirmDialog(null, optionPanel, TITLE, JOptionPane.OK_CANCEL_OPTION);
-			
-			if (confirmResponse == JOptionPane.CANCEL_OPTION){
-				return; // no accusations will be made here today.
-			}
-			// TODO: confirm again
-			// else proceed with accusation
-			MurderSolution accusation = new MurderSolution(new CharacterCard((Game.Character)murdererSelect.getSelectedItem()),
-					new RoomCard((Game.Room)roomSelect.getSelectedItem()),
-					new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
-			
-			System.out.println(accusation);
-			
-			Player currentPlayer = game.getWhoseTurn();
-			// move through players to the left
-			// asking them to refute the accusation
-			for (int i = 0; i < game.getNumberOfPlayers(); i++){
-				currentPlayer = game.getPlayerToLeft(currentPlayer);
-				
-				final String ACCUSATION_CONFIRM_TITLE = currentPlayer.getCharacter().toString()+", can you refute this accusation?";
-				JPanel accusationPanel = new JPanel();
-				accusationPanel.setLayout(new BorderLayout());
-				
-				JPanel cardsPanel = new JPanel();
-				cardsPanel.setLayout(new FlowLayout());
-				JLabel characterLabel = new JLabel(accusation.getCharacter().toString());
-				JLabel weaponLabel = new JLabel(accusation.getWeapon().toString());
-				JLabel roomLabel = new JLabel(accusation.getRoom().toString());
-				cardsPanel.add(characterLabel);
-				cardsPanel.add(weaponLabel);
-				cardsPanel.add(roomLabel);
-				accusationPanel.add(cardsPanel, BorderLayout.NORTH);
-				
-				// displays whether the user can refute or not
-				JLabel result = new JLabel();
-				accusationPanel.add(result);
-				
-				Set<Card> matchingCards = accusation.whichCardsMatch(currentPlayer.getCards());
-				
-				if (!matchingCards.isEmpty()){
-					// player has card/s to refute the accusation
-					result.setText("You can refute this accusation");
-					// notify player of card/s they have to refute the accusation
-					for (Card match : matchingCards){
-						JLabel toEdit = null;
-						if (match instanceof CharacterCard){
-							toEdit = characterLabel;
-						}
-						if (match instanceof WeaponCard){
-							toEdit = weaponLabel;
-						}
-						if (match instanceof RoomCard){
-							toEdit = roomLabel;
-						}
-						final String OWNERSHIP_NOTIFY = "\n<YOU HAVE>";
-						toEdit.setText(toEdit.getText()+OWNERSHIP_NOTIFY);
-					}
-					JOptionPane.showMessageDialog(null, accusationPanel, ACCUSATION_CONFIRM_TITLE, JOptionPane.OK_OPTION);
-					return; // end accusation TODO: remove player from game
-				}
-				else {
-					// player has no cards to refute the accusation
-					result.setText("You cannot refute this accusation");
-					JOptionPane.showMessageDialog(null, accusationPanel, ACCUSATION_CONFIRM_TITLE, JOptionPane.OK_OPTION);
-					// continue the accusation confirmation
-				}
-			}
-			final String victoryMessage = "Accusation was correct! "+game.getWhoseTurn()+" has won!";
-			JOptionPane.showMessageDialog(null, victoryMessage);
+			makeAccusation(game.getWhoseTurn());
 		}
 
 	}

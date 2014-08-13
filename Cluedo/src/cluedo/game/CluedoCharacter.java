@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import cluedo.Main;
+
 /**
  * - - - - - - - - - - - - - - - NOT IN USE CURRENTLY
  * @author hardwiwill
@@ -23,7 +25,7 @@ public class CluedoCharacter {
 
 		// find image.
 		try {
-			image = ImageIO.read(new File(Game.RES_PATH+File.separator+name));
+			image = ImageIO.read(new File(Main.RES_PATH+File.separator+name));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

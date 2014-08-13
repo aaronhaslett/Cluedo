@@ -4,13 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class MurderSolution {
+public class MurderHypothesis {
 
 	private CharacterCard character;
 	private RoomCard room;
 	private WeaponCard weapon;
 
-	public MurderSolution(CharacterCard character, RoomCard room, WeaponCard weapon) {
+	public MurderHypothesis(CharacterCard character, RoomCard room, WeaponCard weapon) {
 		super();
 		this.character = character;
 		this.room = room;
@@ -30,10 +30,10 @@ public class MurderSolution {
 
 	@Override
 	public boolean equals(Object o){
-		if (!(o instanceof MurderSolution)){
+		if (!(o instanceof MurderHypothesis)){
 			return false;
 		}
-		MurderSolution s = (MurderSolution) o;
+		MurderHypothesis s = (MurderHypothesis) o;
 
 		return s.getCharacter().equals(this.getCharacter())
 				&& s.getWeapon().equals(this.getWeapon())
