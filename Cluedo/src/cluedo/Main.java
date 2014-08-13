@@ -1,8 +1,8 @@
 package cluedo;
 
-import cluedo.game.Controller;
-import cluedo.game.Game;
-import cluedo.gui.Window;
+import cluedo.game.*;
+import cluedo.board.*;
+import cluedo.gui.*;
 
 public class Main {
 

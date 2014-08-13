@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 
 import cluedo.board.*;
 import cluedo.game.*;
-
+import cluedo.piece.*;
 
 /**
  * @author hardwiwill
@@ -43,9 +43,12 @@ public class BoardPanel extends JPanel{
 					g.setColor(Color.ORANGE);
 					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
 				}
+				else if(boardTiles[y][x] instanceof CharacterPiece){
+					g.setColor(((CharacterPiece)boardTiles[y][x]).getColour());
+					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+				}
 			}
 		}
-
 	}
 
 	public void updateBoard(BoardObject[][] board){

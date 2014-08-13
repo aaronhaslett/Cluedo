@@ -7,6 +7,10 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import java.util.*;
+import java.awt.Point;
+import cluedo.game.Player;
+
 public class Board{
 
 	public static final int SQUARE_SIZE = 20;
@@ -27,7 +31,7 @@ public class Board{
 	private static Room lounge = new Room("Lounge",
 								new int[][][]{{{17,0},{23,5}}},
 								new Door[]{ new Door(new int[]{17,5}, "S")});
-	public static Room library = new Room("Library",
+	private static Room library = new Room("Library",
 								new int[][][]{{{0,6},{5,10}}, {{6,7},{6,9}}},
 								new Door[]{ new Door(new int[]{3,10}, "S"),
 											new Door(new int[]{6,8}, "E")});
@@ -40,24 +44,26 @@ public class Board{
 								new Door[]{ new Door(new int[]{17,9}, "N"),
 											new Door(new int[]{16,12}, "W")});
 	private static Room conservatory = new Room("Conservatory",
-								new int[][][]{{{0,19},{5,23}}, {{1,18},{4,18}}},
-								new Door[]{ new Door(new int[]{4,18}, "E")});
+								new int[][][]{{{0,20},{5,23}}, {{1,19},{4,19}}},
+								new Door[]{ new Door(new int[]{4,19}, "E")});
 	private static Room ballroom = new Room("Ballroom",
-								new int[][][]{{{8,16},{15,21}}, {{10,22},{13,23}}},
-								new Door[]{ new Door(new int[]{8,18}, "W"),
-											new Door(new int[]{9,16}, "N"),
-										    new Door(new int[]{14,16}, "N"),
-											new Door(new int[]{15,18}, "W")});
+								new int[][][]{{{8,17},{15,22}}, {{10,23},{13,23}}},
+								new Door[]{ new Door(new int[]{8,19}, "W"),
+											new Door(new int[]{9,17}, "N"),
+										    new Door(new int[]{14,17}, "N"),
+											new Door(new int[]{15,19}, "E")});
 	private static Room kitchen = new Room("Kitchen",
-								new int[][][]{{{18,17},{23,23}}},
-								new Door[]{ new Door(new int[]{19,17}, "N" )});
+								new int[][][]{{{18,18},{23,23}}},
+								new Door[]{ new Door(new int[]{19,18}, "N" )});
 	public static Room[] rooms = {study, hall, lounge, library, billiardRoom, diningRoom, conservatory, ballroom, kitchen};
 
-	public Board(){
+	private static List<Player> players;
+
+	public Board(List<Player> players){
 		//Add warps.
 		study.setWarp(new int[]{0,3}, kitchen);
 		kitchen.setWarp(new int[]{18,23}, study);
-		conservatory.setWarp(new int[]{1,18}, lounge);
+		conservatory.setWarp(new int[]{1,19}, lounge);
 		lounge.setWarp(new int[]{23,5}, conservatory);
 
 		//Each room is composed of rectangles declared above.  Add each square in each rectangle to the board.
@@ -76,42 +82,15 @@ public class Board{
 				board[room.warp.coords[1]][room.warp.coords[0]] = room.warp;
 			}
 		}
+
+		for(Player player: players){
+			int[] pos = player.getCharacter().getStartingPosition();
+			board[pos[1]][pos[0]] = player.getCharacter();
+			player.position = new Point(pos[0], pos[1]);
+		}
 	}
+
 	public BoardObject[][] getBoardTiles(){
 		return board;
-	}
-
-	//Some temporary GUI code for testing.
-	public static void main(String[] args){
-		final Board board = new Board();
-
-		JComponent canvas = new JComponent(){
-			protected void paintComponent(Graphics g){
-				for(int y=0; y<SIZE; y++){
-					for(int x=0; x<SIZE; x++){
-						if(board.getBoardTiles()[y][x] == null){
-							g.setColor(Color.BLACK);
-							g.drawRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(board.getBoardTiles()[y][x] instanceof Room){
-							g.setColor(Color.RED);
-							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(board.getBoardTiles()[y][x] instanceof Door){
-							g.setColor(Color.BLUE);
-							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}else if(board.getBoardTiles()[y][x] instanceof Warp){
-							g.setColor(Color.ORANGE);
-							g.fillRect(x*SQUARE_SIZE, y*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-						}
-					}
-				}
-			}
-		};
-
-		JFrame frame = new JFrame("Cluedo");
-		int windowSize = SQUARE_SIZE*board.SIZE;
-		frame.setSize(windowSize+5,windowSize+25);
-		frame.add(canvas);
-		frame.setVisible(true);
-		canvas.repaint();
 	}
 }
