@@ -1,6 +1,5 @@
 package cluedo.card;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +8,6 @@ import javax.imageio.ImageIO;
 
 import cluedo.Main;
 import cluedo.game.Game;
-import cluedo.game.Game.Room;
 
 public class RoomCard extends Card{
 	private Game.Room room;
@@ -35,8 +33,15 @@ public class RoomCard extends Card{
 	}
 
 	@Override
-	public String getImagePath(){
-		return Main.CARD_IMAGE_PATH + "room" + File.separator + room.name()+".jpg";
+	public BufferedImage getBufferedImage(){
+		String path = Main.CARD_IMAGE_PATH + "room" + File.separator + room.name()+".jpg";
+		BufferedImage image=null;
+		try {
+			image = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 
 }

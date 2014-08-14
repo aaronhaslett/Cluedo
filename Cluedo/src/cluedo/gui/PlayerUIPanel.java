@@ -5,20 +5,18 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import cluedo.Main;
 import cluedo.card.Card;
 import cluedo.game.Controller;
 import cluedo.game.Player;
+import cluedo.game.Util;
 
 /**
  * UI for
@@ -31,20 +29,24 @@ import cluedo.game.Player;
  */
 public class PlayerUIPanel extends JPanel{
 
+	public static final Dimension UI_PANEL_SIZE = new Dimension(Window.WINDOW_SIZE.width, 200);
+	public static final Dimension CARD_PANEL_SIZE =
+			new Dimension((int)(UI_PANEL_SIZE.width*0.8), UI_PANEL_SIZE.height);
+
 	private Player currentPlayer;
 	private JLabel playerLabel;
 	private JPanel cardPanel;
 
 	public PlayerUIPanel(Controller control){
-		setPreferredSize(new Dimension(Window.WINDOW_SIZE.width, 200));
+		setPreferredSize(UI_PANEL_SIZE);
 		setLayout(new BorderLayout());
-		setBackground(Color.MAGENTA);
 
 		playerLabel = new JLabel();
+		playerLabel.setOpaque(true);
 		add(playerLabel, BorderLayout.NORTH);
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout());
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
 		JButton endTurnButton = new JButton("End turn");
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
@@ -56,39 +58,32 @@ public class PlayerUIPanel extends JPanel{
 
 		cardPanel = new JPanel();
 		cardPanel.setLayout(new FlowLayout());
-		//cardPanel.setPreferredSize(new Dimension((int)(Window.WINDOW_SIZE.width*0.6), (int)Window.WINDOW_SIZE.height/3));
+		cardPanel.setPreferredSize(CARD_PANEL_SIZE);
 		add(cardPanel, BorderLayout.CENTER);
 
 	}
-
-	/*public void paintComponent(Graphics g){
-		super.paintComponent(g);
-
-		if (currentPlayer == null) return; // if no player is selected, don't draw anything
-
-		final int CARD_REGION_LEFT = 10;
-
-		// draws cards
-		int cardNumber = 0;
-		int cardWidth = 150;
-		for (Card card : currentPlayer.getCards()){
-			g.drawString(card.toString(), CARD_REGION_LEFT + cardNumber*cardWidth, 50);
-			cardNumber++;
-		}
-	}*/
 
 	public void updatePlayerTurn(Player p) {
 		currentPlayer = p;
 		playerLabel.setText("Player: " + currentPlayer);
 
+
 		// update cards
 		cardPanel.removeAll();
 		Set<Card> playerCards = p.getCards();
-		final int CARD_WIDTH =  playerCards.size(); // TODO: scale image
+
+		final int CARD_WIDTH =  (UI_PANEL_SIZE.width -
+				((FlowLayout)cardPanel.getLayout()).getHgap()*playerCards.size())
+				/ playerCards.size(); // TODO: scale image
+		final int CARD_HEIGHT = (int)(CARD_WIDTH*Card.HEIGHT_RATIO);
+
 		for (Card card : p.getCards()){
-			//cardPanel.add(new JLabel(new ImageIcon("res/img/cards/weapon/Spanner.jpg"))); // test
-			cardPanel.add(new JLabel(new ImageIcon(card.getImagePath())));
+			BufferedImage cardImage = card.getBufferedImage();
+			BufferedImage resizedImage = Util.imageResize(cardImage, CARD_WIDTH, CARD_HEIGHT);
+			cardPanel.add(new JLabel(new ImageIcon(resizedImage)));
 		}
+		playerLabel.setBackground(p.getColour());
+		cardPanel.repaint();
 	}
 
 }

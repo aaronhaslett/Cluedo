@@ -41,7 +41,7 @@ public class Controller {
 
 		board = new Board(players);
 		window.updateBoard(board.getBoardTiles());
-		window.repaint();
+		//window.repaint();
 
 		game = new Game(players);
 

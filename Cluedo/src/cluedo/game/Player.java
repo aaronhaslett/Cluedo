@@ -1,10 +1,11 @@
 package cluedo.game;
+import java.awt.Color;
+import java.awt.Point;
 import java.util.HashSet;
 import java.util.Set;
 
 import cluedo.card.Card;
 import cluedo.piece.CharacterPiece;
-import java.awt.Point;
 
 
 public class Player {
@@ -35,6 +36,10 @@ public class Player {
 
 	public CharacterPiece getCharacter(){
 		return piece;
+	}
+
+	public Color getColour() {
+		return piece.getColour();
 	}
 
 }

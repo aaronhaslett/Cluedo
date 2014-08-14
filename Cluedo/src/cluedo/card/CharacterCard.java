@@ -1,5 +1,4 @@
 package cluedo.card;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,8 +33,15 @@ public class CharacterCard extends Card{
 	}
 
 	@Override
-	public String getImagePath(){
-		return Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg";
+	public BufferedImage getBufferedImage(){
+		String path = Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg";
+		BufferedImage image=null;
+		try {
+			image = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 
 }

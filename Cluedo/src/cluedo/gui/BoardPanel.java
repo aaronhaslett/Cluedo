@@ -23,7 +23,7 @@ public class BoardPanel extends JPanel{
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawString("Board", 200, 300);
+		//g.drawString("Board", 200, 300);
 
 		if (boardTiles == null) return; // before board is made ...
 		// draws stuff
