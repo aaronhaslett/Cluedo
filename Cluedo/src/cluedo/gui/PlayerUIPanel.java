@@ -63,6 +63,10 @@ public class PlayerUIPanel extends JPanel{
 
 	}
 
+	/**
+	 * Goes to the next turn. Updates game state and refreshes UI
+	 * @param p
+	 */
 	public void updatePlayerTurn(Player p) {
 		currentPlayer = p;
 		playerLabel.setText("Player: " + currentPlayer);
@@ -85,5 +89,4 @@ public class PlayerUIPanel extends JPanel{
 		playerLabel.setBackground(p.getColour());
 		cardPanel.repaint();
 	}
-
 }
