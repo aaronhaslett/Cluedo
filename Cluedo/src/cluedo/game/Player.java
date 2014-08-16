@@ -6,9 +6,10 @@ import java.util.Set;
 
 import cluedo.card.Card;
 import cluedo.piece.CharacterPiece;
+import cluedo.board.*;
 
 
-public class Player {
+public class Player implements BoardObject {
 	private CharacterPiece piece;
 	private Set<Card> cards;
 	public Point position;

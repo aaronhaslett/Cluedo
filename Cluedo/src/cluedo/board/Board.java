@@ -13,7 +13,7 @@ import cluedo.game.Player;
 
 public class Board{
 
-	public static final int SQUARE_SIZE = 20;
+	public static final int SQUARE_SIZE = 25;
 	public static final int SIZE = 24;
 
 	//The whole board.  Null is an empty square.
@@ -85,9 +85,16 @@ public class Board{
 
 		for(Player player: players){
 			int[] pos = player.getCharacter().getStartingPosition();
-			board[pos[1]][pos[0]] = player.getCharacter();
+			board[pos[1]][pos[0]] = player;
 			player.position = new Point(pos[0], pos[1]);
 		}
+	}
+
+	public boolean move(Player p, Point to){
+		board[(int)p.position.getY()][(int)p.position.getX()] = null;
+		board[(int)to.getY()][(int)to.getX()] = p;
+		p.position.setLocation(to.getX(), to.getY());
+		return true;
 	}
 
 	public BoardObject[][] getBoardTiles(){

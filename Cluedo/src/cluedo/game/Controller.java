@@ -19,6 +19,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import javax.swing.event.MouseInputAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseEvent;
+import java.awt.Point;
+
 import cluedo.board.Board;
 import cluedo.card.Card;
 import cluedo.card.CharacterCard;
@@ -27,6 +32,8 @@ import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
+
+import cluedo.board.*;
 
 public class Controller {
 
@@ -310,39 +317,48 @@ public class Controller {
 		}
 	}
 
-	public class BoardMouseListener implements MouseListener {
+	public class BoardMouseListener extends MouseInputAdapter{
+		//We need to know the location of the last and current mouse press.
+		private int pressedX = 0;
+		private int pressedY = 0;
+		public Player dragging;
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+		JPanel parent;
 
+		public BoardMouseListener(JPanel parent){
+			this.parent = parent;
+		} 
+	
+		public void mousePressed(MouseEvent e){
+			if(board.getBoardTiles() == null){return;}
+
+			int boardSize = board.getBoardTiles().length+1;
+			int squareX = (int)(e.getX()/boardSize);
+			int squareY = (int)(e.getY()/boardSize);
+
+			BoardObject clicked = board.getBoardTiles()[squareY][squareX];
+			dragging = clicked instanceof Player ? (Player)clicked : null;
 		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+	
+		public void mouseDragged(MouseEvent e) {
 		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
+	
+		public void mouseWheelMoved(MouseWheelEvent e){
 		}
+	
+		public void mouseReleased(MouseEvent e){
+			if(dragging == null){return;}
 
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
+			int boardSize = board.getBoardTiles().length+1;
+			int squareX = (int)(e.getX()/boardSize);
+			int squareY = (int)(e.getY()/boardSize);
 
+			if(!(board.move(dragging, new Point(squareX, squareY)))){
+				
+			}
+			window.repaint();
 		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
+	};
 
 	public class EndTurnButtonListener implements ActionListener {
 

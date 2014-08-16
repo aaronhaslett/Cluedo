@@ -18,7 +18,10 @@ public class BoardPanel extends JPanel{
 	private BoardObject[][] boardTiles;
 
 	public BoardPanel(Controller control){
-		addMouseListener(control.new BoardMouseListener());
+		Controller.BoardMouseListener bml = control.new BoardMouseListener(this);
+        addMouseWheelListener(bml);
+        addMouseMotionListener(bml);
+        addMouseListener(bml);
 	}
 
 	public void paintComponent(Graphics g){
@@ -33,18 +36,8 @@ public class BoardPanel extends JPanel{
 				if(boardTiles[y][x] == null){
 					g.setColor(Color.BLACK);
 					g.drawRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-				}else if(boardTiles[y][x] instanceof Room){
-					g.setColor(Color.RED);
-					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-				}else if(boardTiles[y][x] instanceof Door){
-					g.setColor(Color.BLUE);
-					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-				}else if(boardTiles[y][x] instanceof Warp){
-					g.setColor(Color.ORANGE);
-					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
-				}
-				else if(boardTiles[y][x] instanceof CharacterPiece){
-					g.setColor(((CharacterPiece)boardTiles[y][x]).getColour());
+				}else{ 
+					g.setColor(boardTiles[y][x].getColour());
 					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
 				}
 			}

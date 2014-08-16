@@ -1,6 +1,7 @@
 package cluedo.board;
 
 import java.awt.Rectangle;
+import java.awt.Color;
 
 import cluedo.game.Player;
 
@@ -51,5 +52,9 @@ public class Room implements BoardObject{
 	public Rectangle[] getRectangles(){
 		return rectangles;
 
+	}
+
+	public Color getColour(){
+		return Color.red;
 	}
 }

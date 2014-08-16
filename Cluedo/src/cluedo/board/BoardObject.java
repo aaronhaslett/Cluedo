@@ -1,5 +1,7 @@
 package cluedo.board;
 
-public interface BoardObject {
+import java.awt.Color;
 
+public interface BoardObject {
+	public Color getColour();
 }
