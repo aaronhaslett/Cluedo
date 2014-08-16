@@ -43,4 +43,25 @@ public class Player implements BoardObject {
 		return piece.getColour();
 	}
 
+	public Point getPosition(){
+		return position;
+	}
+
+	public CharacterPiece getPiece(){
+		return piece;
+	}
+
+	@Override
+	public boolean equals(Object o){
+		if (!(o instanceof Player))
+			return false;
+
+		Player other = (Player)o;
+
+		if (this.piece.equals(other.getPiece())
+			&& this.position.equals(other.getPosition()))
+			return true;
+		else return false;
+	}
+
 }

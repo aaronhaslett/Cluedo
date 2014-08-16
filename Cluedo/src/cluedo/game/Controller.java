@@ -157,10 +157,11 @@ public class Controller {
 	 * Makes dialog boxes to go through murder suggestion process.
 	 * @param p: player to make accusation
 	 */
-	/*private void makeSuggestion(Player player){
+	private void makeSuggestion(Player player){
 		Player currentPlayer = game.getWhoseTurn();
 
-		//MurderSolution suggestion = selectHypothesis(ROOM_THE_PLAYER_IS_IN);
+		// TEMP ROOM TODO: implement getter for the position of a piece
+		MurderHypothesis suggestion = selectSuggestion(Game.Room.BallRoom);
 
 		if (suggestion == null){
 			// player cancelled the accusation
@@ -170,7 +171,7 @@ public class Controller {
 
 		// test the hypothesis
 		String message = null;
-		if (testMurderHypothesis(currentPlayer, suggestion)){
+		if (testMurderSuggestion(currentPlayer, suggestion)){
 			message = "Suggestion was correct! "+player+" has won!";
 			// TODO: player wins the game, game ends.
 		}
@@ -179,7 +180,7 @@ public class Controller {
 		}
 
 		JOptionPane.showMessageDialog(null, message);
-	}*/
+	}
 
 	/**
 	 * Makes dialog boxes to go through accusation process.
@@ -187,7 +188,7 @@ public class Controller {
 	 */
 	private void makeAccusation(Player player){
 
-		MurderHypothesis accusation = selectHypothesis(null);
+		MurderHypothesis accusation = selectAccusation();
 
 		if (accusation == null){
 			// player cancelled the accusation
@@ -197,7 +198,7 @@ public class Controller {
 
 		// test the hypothesis
 		String message = null;
-		if (testMurderHypothesisValid(player, accusation)){
+		if (game.isAccusationCorrect(accusation)){
 			message = "Accusation was correct! "+player+" has won!";
 			// TODO: player wins the game, game ends.
 		}
@@ -209,11 +210,35 @@ public class Controller {
 		JOptionPane.showMessageDialog(null, message);
 	}
 
+	private MurderHypothesis selectSuggestion(Game.Room currentRoom) {
+		final String TITLE = "so how did the murder happen?";
+		JPanel optionPanel = new JPanel();
+		optionPanel.setLayout(new FlowLayout());
+
+		JComboBox<Game.Character> murdererSelect = new JComboBox<Game.Character>(Game.Character.values());
+		JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
+
+
+		optionPanel.add(murdererSelect);
+		optionPanel.add(weaponSelect);
+
+		// popup box requesting murder details
+		int confirmResponse = JOptionPane.showConfirmDialog(null, optionPanel, TITLE, JOptionPane.OK_CANCEL_OPTION);
+
+		if (confirmResponse == JOptionPane.CANCEL_OPTION){
+			return null; // no accusations will be made here today.
+		}
+		// TODO: (maybe) confirm again
+		return new MurderHypothesis(new CharacterCard((Game.Character)murdererSelect.getSelectedItem()),
+				new RoomCard(currentRoom),
+				new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
+	}
+
 	/**
 	 * @param room: restriction to one room or null if no room restriction
 	 * @return a MurderHypothesis containing the relevant cards
 	 */
-	private static MurderHypothesis selectHypothesis(Game.Room room){
+	private static MurderHypothesis selectAccusation(){
 		final String TITLE = "so how did the murder happen?";
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new FlowLayout());
@@ -222,9 +247,6 @@ public class Controller {
 		JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
 		JComboBox<Game.Room> roomSelect = new JComboBox<Game.Room>(Game.Room.values());
 
-		if (room != null) {
-			//roomSelect. //TODO: limit room select to room parameter
-		}
 
 		optionPanel.add(murdererSelect);
 		optionPanel.add(weaponSelect);
@@ -248,7 +270,7 @@ public class Controller {
 	 * @param hypothesis
 	 * @return true if murder hypothesis is correct, false if not
 	 */
-	private boolean testMurderHypothesisValid(Player hypothesiser, MurderHypothesis hypothesis){
+	private boolean testMurderSuggestion(Player hypothesiser, MurderHypothesis hypothesis){
 
 		for (int i = 0; i < game.getNumberOfPlayers(); i++){
 			hypothesiser = game.getPlayerToLeft(hypothesiser);

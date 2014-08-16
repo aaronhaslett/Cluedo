@@ -23,13 +23,26 @@ public class Game {
 	private Set<CluedoRoom> rooms;
 	private Set<CluedoWeapon> weapons;*/ // SOON
 
-	private List<Player> players;
+	private List<Player> players; // List to preserve initial ordering
 	private MurderHypothesis murder;
 	private Player turn;
 
 	private int diceValue;
 
+	/**
+	 * Makes a new game
+	 * PRE: must be 3 <= number of players <= number of characters
+	 * PRE: all characters are unique
+	 * @param players
+	 */
 	public Game(List<Player> players){
+		if (players.size() < 3 || players.size() > Character.values().length){
+			throw new IllegalArgumentException("incorrect number of players");
+		}
+		if (new HashSet<Player>(players).size() < players.size()){
+			throw new IllegalArgumentException("can't have two players with the same character");
+		}
+
 		this.players = players;
 		setUpCards();
 		// sets the first player to be the 'turn owner'
@@ -38,6 +51,7 @@ public class Game {
 
 
 	/**
+	 * Adds all cards to the game,
 	 * Sets up game solution (random murderer, weapon and room),
 	 * Deals cards evenly to all players
 	 */
@@ -96,14 +110,9 @@ public class Game {
 			players.get(i%players.size()).giveCard(random);
 			allCards.remove(random);
 		}
-
 	}
 
-	public void makeSuggestion(Player p, MurderHypothesis m){
-
-	}
-
-	private boolean isAccusationCorrect(MurderHypothesis m){
+	public boolean isAccusationCorrect(MurderHypothesis m){
 		return murder.equals(m);
 	}
 
