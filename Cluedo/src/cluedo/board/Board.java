@@ -91,10 +91,55 @@ public class Board{
 	}
 
 	public boolean move(Player p, Point to){
-		board[(int)p.position.getY()][(int)p.position.getX()] = null;
-		board[(int)to.getY()][(int)to.getX()] = p;
-		p.position.setLocation(to.getX(), to.getY());
-		return true;
+		int px = (int)p.position.getX(), py = (int)p.position.getY();
+		int tx = (int)to.getX(), ty = (int)to.getY();
+		if(board[ty][tx] instanceof PathSquare ||
+					(board[ty][tx] instanceof Door && ((Door)board[ty][tx]).highlighted)){
+			board[py][px] = null;
+			board[ty][tx] = p;
+			p.position.setLocation(to.getX(), to.getY());
+			return true;
+		}
+		return false;
+	}
+
+	public void showPaths(int diceRoll, Player player){
+		Point p = player.getPosition();
+		showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
+	}
+
+	private void showPaths(int diceRoll, int[] position){
+		if(diceRoll == 0){return;}
+
+		int px = position[0], py=position[1];
+		int[][] surroundingSquares = new int[][]{{px-1, py},{px, py+1},{px,py-1},{px+1,py}};
+
+		for(int[] sq : surroundingSquares){
+			int x=sq[0], y=sq[1];
+			if(x<0 || x>23 || y<0 || y>23){continue;}
+
+			if(board[y][x] == null || board[y][x] instanceof PathSquare ){
+				board[y][x] = new PathSquare(sq);
+				showPaths(diceRoll-1, sq);
+			}
+			else if(board[y][x] instanceof Door){
+				((Door)board[y][x]).highlighted = true;
+			}
+		}
+	}
+
+	public void clearPath(){
+		int boardSize = board.length;
+
+		for(int x=0; x<boardSize; x++){
+			for(int y=0; y<boardSize; y++){
+				if(board[y][x] instanceof Door){
+					((Door)board[y][x]).highlighted = false;
+				}else if(board[y][x] instanceof PathSquare){
+					board[y][x] = null;
+				}
+			}
+		}
 	}
 
 	public BoardObject[][] getBoardTiles(){

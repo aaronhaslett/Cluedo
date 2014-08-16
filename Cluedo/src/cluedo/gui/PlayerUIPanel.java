@@ -51,9 +51,15 @@ public class PlayerUIPanel extends JPanel{
 		JButton endTurnButton = new JButton("End turn");
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
 		buttonPanel.add(endTurnButton);
+
 		JButton accusationButton = new JButton("Make accusation");
 		accusationButton.addActionListener(control.new AccusationButtonListener());
 		buttonPanel.add(accusationButton);
+
+		JButton diceButton = new JButton("Roll dice");
+		diceButton.addActionListener(control.new DiceButtonListener());
+		buttonPanel.add(diceButton);
+
 		add(buttonPanel, BorderLayout.WEST);
 
 		cardPanel = new JPanel();

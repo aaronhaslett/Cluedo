@@ -40,6 +40,7 @@ public class Controller {
 	private Game game;
 	private Board board;
 	private Window window;
+	private boolean rolled = false;
 
 	public Controller(){
 		window = new Window(this);
@@ -340,17 +341,8 @@ public class Controller {
 	}
 
 	public class BoardMouseListener extends MouseInputAdapter{
-		//We need to know the location of the last and current mouse press.
-		private int pressedX = 0;
-		private int pressedY = 0;
 		public Player dragging;
 
-		JPanel parent;
-
-		public BoardMouseListener(JPanel parent){
-			this.parent = parent;
-		} 
-	
 		public void mousePressed(MouseEvent e){
 			if(board.getBoardTiles() == null){return;}
 
@@ -360,12 +352,17 @@ public class Controller {
 
 			BoardObject clicked = board.getBoardTiles()[squareY][squareX];
 			dragging = clicked instanceof Player ? (Player)clicked : null;
+
+			if(dragging!=null){
+				dragging.draggingPosition = new Point(e.getX(), e.getY());
+			}
 		}
 	
-		public void mouseDragged(MouseEvent e) {
-		}
-	
-		public void mouseWheelMoved(MouseWheelEvent e){
+		public void mouseDragged(MouseEvent e){
+			if(dragging==null){return;}
+
+			dragging.draggingPosition.setLocation(e.getX(), e.getY());
+			window.repaint();
 		}
 	
 		public void mouseReleased(MouseEvent e){
@@ -375,30 +372,41 @@ public class Controller {
 			int squareX = (int)(e.getX()/boardSize);
 			int squareY = (int)(e.getY()/boardSize);
 
-			if(!(board.move(dragging, new Point(squareX, squareY)))){
-				
+			if((board.move(dragging, new Point(squareX, squareY)))){
+				board.clearPath();
 			}
+
+			dragging = null;
 			window.repaint();
 		}
 	};
 
 	public class EndTurnButtonListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// give next player the turn, update graphics
 			nextTurn();
+			rolled = false;
 		}
-
 	}
 
 	public class AccusationButtonListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			makeAccusation(game.getWhoseTurn());
 		}
-
 	}
 
+	public class DiceButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(Controller.this.rolled){return;}
+			game.rollDice();
+			System.out.println("Dice value is " + game.getDiceValue());
+
+			board.showPaths(game.getDiceValue(), game.getWhoseTurn());
+			Controller.this.rolled = true;
+			window.repaint();
+		}
+	}
 }

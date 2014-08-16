@@ -13,6 +13,7 @@ public class Player implements BoardObject {
 	private CharacterPiece piece;
 	private Set<Card> cards;
 	public Point position;
+	public Point draggingPosition;//The current point on the screen while being dragged
 
 	public Player(CharacterPiece piece){
 		cards = new HashSet<Card>();
