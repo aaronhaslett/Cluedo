@@ -110,17 +110,23 @@ public class Board{
 
 		if(highlightedDoor){
 			placePlayerInRoom(p, ((Door)ob).room);
-		}
-		else{
+		}else{
 			board[ty][tx] = p;
+			p.position.setLocation(to.getX(), to.getY());
 		}
-		p.position.setLocation(to.getX(), to.getY());
+
 		return true;
 	}
 
 	public void showPaths(int diceRoll, Player player){
 		Point p = player.getPosition();
-		showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
+		if(player.room == null){
+			showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
+		}else{
+			for(Door door: player.room.doors){
+				showPaths(diceRoll, door.coords);
+			}
+		}
 	}
 
 	private void showPaths(int diceRoll, int[] position){
@@ -148,6 +154,7 @@ public class Board{
 			if(board[slot[1]][slot[0]] instanceof Room){
 				board[slot[1]][slot[0]] = p;
 				p.room = r;
+				p.position.setLocation(slot[0], slot[1]);
 				return;
 			}
 		}
