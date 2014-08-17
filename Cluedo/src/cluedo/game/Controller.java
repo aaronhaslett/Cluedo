@@ -377,7 +377,11 @@ public class Controller {
 			if(dragging!=null){
 				dragging.draggingPosition = new Point(e.getX(), e.getY());
 				int x = (int)dragging.position.getX(), y = (int)dragging.position.getY();
-				board.getBoardTiles()[y][x] = null;
+				if(dragging.room == null){
+					board.getBoardTiles()[y][x] = null;
+				}else{
+					board.getBoardTiles()[y][x] = dragging.room;
+				}
 			}
 
 			pressedX = (int)e.getX();
@@ -416,6 +420,7 @@ public class Controller {
 			// give next player the turn, update graphics
 			nextTurn();
 			game.setRolled(false);
+			board.clearPath();
 		}
 	}
 

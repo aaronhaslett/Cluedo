@@ -95,24 +95,38 @@ public class Board{
 		int tx = (int)to.getX(), ty = (int)to.getY();
 
 		BoardObject ob = board[ty][tx];
+		boolean pathSquare = ob instanceof PathSquare;
+		boolean highlightedDoor = ob instanceof Door && ((Door)ob).highlighted;
 
-		if(ob instanceof PathSquare){}
-		else if(ob instanceof Door && ((Door)ob).highlighted){ 
-			p.room = ((Door)ob).room;
-		}
-		else{
+		if(!(pathSquare || highlightedDoor)){
 			return false;
 		}
 
-		board[py][px] = null;
-		board[ty][tx] = p;
-		p.position.setLocation(to.getX(), to.getY());
+		if(p.room != null){
+			removePlayerFromRoom(p, p.room);
+		}else{
+			board[py][px] = null;
+		}
+
+		if(highlightedDoor){
+			placePlayerInRoom(p, ((Door)ob).room);
+		}else{
+			board[ty][tx] = p;
+			p.position.setLocation(to.getX(), to.getY());
+		}
+
 		return true;
 	}
 
 	public void showPaths(int diceRoll, Player player){
 		Point p = player.getPosition();
-		showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
+		if(player.room == null){
+			showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
+		}else{
+			for(Door door: player.room.doors){
+				showPaths(diceRoll, door.coords);
+			}
+		}
 	}
 
 	private void showPaths(int diceRoll, int[] position){
@@ -136,8 +150,24 @@ public class Board{
 	}
 
 	private void placePlayerInRoom(Player p, Room r){
-		int x=(int)r.centralPoint.getX(), y=(int)r.centralPoint.getY();
-		board[y][x] = p;
+		for(int[] slot: r.playerSlots){
+			if(board[slot[1]][slot[0]] instanceof Room){
+				board[slot[1]][slot[0]] = p;
+				p.room = r;
+				p.position.setLocation(slot[0], slot[1]);
+				return;
+			}
+		}
+	}
+
+	private void removePlayerFromRoom(Player p, Room r){
+		for(int[] slot: r.playerSlots){
+			if(board[slot[1]][slot[0]] == p){
+				board[slot[1]][slot[0]] = r;
+				p.room = null;
+				return;
+			}
+		}
 	}
 
 	public void clearPath(){
