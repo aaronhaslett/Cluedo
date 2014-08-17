@@ -48,4 +48,15 @@ public class CharacterPiece implements Piece, BoardObject{
 	public String toString(){
 		return character.name();
 	}
+	
+	public Game.Character getCharacter(){
+		return character;
+	}
+	
+	public boolean equals(Object o){
+		if (!(o instanceof CharacterPiece)){
+			return false;
+		}
+		return this.character.equals(((CharacterPiece)o).getCharacter());
+	}
 }

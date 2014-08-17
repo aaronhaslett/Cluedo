@@ -46,11 +46,7 @@ public class Controller {
 		window = new Window(this);
 
 		List<Player> players = playerSelect();
-
 		board = new Board(players);
-		window.updateBoard(board.getBoardTiles());
-		//window.repaint();
-
 		game = new Game(players);
 
 		window.updatePlayerTurn(game.getWhoseTurn());
