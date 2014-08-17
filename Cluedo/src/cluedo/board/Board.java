@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 
+import cluedo.game.Game;
 import cluedo.game.Player;
 
 public class Board{
@@ -15,39 +16,39 @@ public class Board{
 	private BoardObject[][] board = new BoardObject[SIZE][SIZE];
 
 	//The rooms, the coordinates of rectangles making them up, and their doors.
-	private static Room study = new Room("Study",
+	private static Room study = new Room(Game.Room.Study,
 								new int[][][]{{{0,0},{5,3}}, {{6,1},{6,3}}},
 								new Door[]{ new Door(new int[]{6,3}, "S")});//Doors have a facing direction.
-	private static Room hall = new Room("Hall",
+	private static Room hall = new Room(Game.Room.Hall,
 								new int[][][]{{{9,0},{14,6}}},
 								new Door[]{ new Door(new int[]{9,4}, "W"),
 											new Door(new int[]{11,6}, "S"),
 										    new Door(new int[]{12,6}, "S")});
-	private static Room lounge = new Room("Lounge",
+	private static Room lounge = new Room(Game.Room.Lounge,
 								new int[][][]{{{17,0},{23,5}}},
 								new Door[]{ new Door(new int[]{17,5}, "S")});
-	private static Room library = new Room("Library",
+	private static Room library = new Room(Game.Room.Library,
 								new int[][][]{{{0,6},{5,10}}, {{6,7},{6,9}}},
 								new Door[]{ new Door(new int[]{3,10}, "S"),
 											new Door(new int[]{6,8}, "E")});
-	private static Room billiardRoom = new Room("Billiard Room",
+	private static Room billiardRoom = new Room(Game.Room.BilliardRoom,
 								new int[][][]{{{0,12},{5,16}}},
 								new Door[]{ new Door(new int[]{1,12}, "N"),
 											new Door(new int[]{5,15}, "E")});
-	private static Room diningRoom = new Room("Dining Room",
+	private static Room diningRoom = new Room(Game.Room.DiningRoom,
 								new int[][][]{{{16,9},{18,14}}, {{19,9},{23,15}}},
 								new Door[]{ new Door(new int[]{17,9}, "N"),
 											new Door(new int[]{16,12}, "W")});
-	private static Room conservatory = new Room("Conservatory",
+	private static Room conservatory = new Room(Game.Room.Conservatory,
 								new int[][][]{{{0,20},{5,23}}, {{1,19},{4,19}}},
 								new Door[]{ new Door(new int[]{4,19}, "E")});
-	private static Room ballroom = new Room("Ballroom",
+	private static Room ballroom = new Room(Game.Room.BallRoom,
 								new int[][][]{{{8,17},{15,22}}, {{10,23},{13,23}}},
 								new Door[]{ new Door(new int[]{8,19}, "W"),
 											new Door(new int[]{9,17}, "N"),
 										    new Door(new int[]{14,17}, "N"),
 											new Door(new int[]{15,19}, "E")});
-	private static Room kitchen = new Room("Kitchen",
+	private static Room kitchen = new Room(Game.Room.Kitchen,
 								new int[][][]{{{18,18},{23,23}}},
 								new Door[]{ new Door(new int[]{19,18}, "N" )});
 	public static Room[] rooms = {study, hall, lounge, library, billiardRoom, diningRoom, conservatory, ballroom, kitchen};

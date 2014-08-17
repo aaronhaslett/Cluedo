@@ -45,14 +45,14 @@ public class PlayerUIPanel extends JPanel{
 	private DiceIcon diceIcon;
 
 	/**
-	 * Initilised UI components
+	 * Initialised UI components
 	 * @param control
 	 */
 	public PlayerUIPanel(Controller control){
 		setPreferredSize(UI_PANEL_SIZE);
 		setLayout(new BorderLayout());
 
-		playerNameLabel = new JLabel("Player", SwingConstants.CENTER);
+		playerNameLabel = new JLabel("", SwingConstants.CENTER);
 		playerNameLabel.setOpaque(true);
 		add(playerNameLabel, BorderLayout.NORTH);
 
@@ -98,7 +98,7 @@ public class PlayerUIPanel extends JPanel{
 
 		cardPanel.removeAll();
 
-		final int CARD_HORIZONTAL_BORDER_CONSTANT = 20;
+		final int CARD_HORIZONTAL_BORDER_CONSTANT = 35;
 		final int CARD_HEIGHT = cardPanel.getSize().height - CARD_HORIZONTAL_BORDER_CONSTANT;
 		final int CARD_WIDTH = (int)(CARD_HEIGHT*Card.WIDTH_RATIO);
 

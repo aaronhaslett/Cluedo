@@ -3,15 +3,17 @@ package cluedo.board;
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import cluedo.game.Game;
+
 public class Room implements BoardObject{
-	private String name;
+	private Game.Room name;
 
 	private Rectangle[] rectangles;
 	private Door[] doors;
 	private Warp warp;
 	private int[][] playerSlots;
 
-	public Room(String name, int[][][] geometry, Door[] doors){
+	public Room(Game.Room name, int[][][] geometry, Door[] doors){
 		this.name = name;
 
 		this.rectangles = new Rectangle[geometry.length];
@@ -42,7 +44,7 @@ public class Room implements BoardObject{
 		}
 	}
 
-	public String getName(){
+	public Game.Room getName(){
 		return name;
 	}
 

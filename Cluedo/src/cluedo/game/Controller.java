@@ -151,24 +151,23 @@ public class Controller {
 	 * @param title
 	 */
 	private void displayErrorBox(String message, String title){
-		JOptionPane.showMessageDialog(null,
-				message, title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null,	message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
 	 * Makes dialog boxes to go through murder suggestion process.
-	 * @param p: player to make accusation
+	 * @param p: player to make suggestion
 	 */
 	private void makeSuggestion(Player player){
 		Player currentPlayer = game.getWhoseTurn();
 
-		MurderHypothesis suggestion = selectSuggestion(Game.Room.BallRoom);
+		MurderHypothesis suggestion = selectSuggestion(player.getRoom().getName());
 
 		if (suggestion == null){
-			// player cancelled the accusation
+			// player cancelled the suggestion
 			return;
 		}
-		// else proceed with accusation
+		// else proceed with suggestion
 
 		// test the hypothesis
 		String message = null;
