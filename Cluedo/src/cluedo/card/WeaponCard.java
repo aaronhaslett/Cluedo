@@ -21,10 +21,11 @@ public class WeaponCard extends Card{
 		return weapon;
 	}
 
+	@Override
 	public String toString(){
 		return this.getClass().getSimpleName() + " \"" + weapon.name() + "\"";
 	}
-
+	
 	@Override
 	public boolean equals(Object o){
 		if (!(o instanceof WeaponCard)){

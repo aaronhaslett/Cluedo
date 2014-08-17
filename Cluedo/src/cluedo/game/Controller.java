@@ -27,6 +27,7 @@ import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
+import cluedo.gui.SuggestDialogs;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
 
@@ -65,6 +66,7 @@ public class Controller {
 	 */
 	public void nextTurn() {
 		game.nextTurn();
+		game.setRolled(false);
 		window.updatePlayerTurn(game.getWhoseTurn());
 		window.repaint();
 	}
@@ -138,6 +140,7 @@ public class Controller {
 				for (JRadioButton button : buttons){
 					if (button.isEnabled()){
 						button.setSelected(true);
+						break;
 					}
 				}
 			}
@@ -158,28 +161,41 @@ public class Controller {
 	 * Makes dialog boxes to go through murder suggestion process.
 	 * @param p: player to make suggestion
 	 */
-	private void makeSuggestion(Player player){
-		Player currentPlayer = game.getWhoseTurn();
+	private void makeSuggestion(Player suggester){
 
-		MurderHypothesis suggestion = selectSuggestion(player.getRoom().getName());
+		Game.Room room = suggester.getRoom().getName();
+		if (room == null){
+			// player is not in a room
+			SuggestDialogs.showMustBeInRoomWarning();
+		}
+		MurderHypothesis suggestion = selectSuggestion(room);
 
 		if (suggestion == null){
 			// player cancelled the suggestion
 			return;
 		}
 		// else proceed with suggestion
-
-		// test the hypothesis
-		String message = null;
-		if (testMurderSuggestion(currentPlayer, suggestion)){
-			message = "Suggestion was correct! "+player+" has won!";
-			// TODO: player wins the game, game ends.
+		Player currentPlayer = game.getPlayerToLeft(suggester);
+		for (int playerCount = 0; playerCount < game.getNumberOfPlayers()-1; playerCount++){
+			
+			List<Card> matchingCards = new ArrayList<Card>();
+			matchingCards.addAll(suggestion.whichCardsMatch(currentPlayer.getCards()));
+			if (matchingCards.isEmpty()){
+				SuggestDialogs.showCantRefuteDialog(currentPlayer, suggestion);
+			}
+			else {
+				// player can refute, show dialog asking them to choose which card to refute with
+				Card refuteCard = SuggestDialogs.showCanRefuteDialog(currentPlayer, suggestion, matchingCards);
+				SuggestDialogs.showWasRefutedDialog(suggester, currentPlayer, refuteCard);
+				// move onto the next turn
+				nextTurn();
+				return;
+			}
+			currentPlayer = game.getPlayerToLeft(currentPlayer);
 		}
-		else {
-			message = "The suggestion has been refuted";
-		}
-
-		JOptionPane.showMessageDialog(null, message);
+		
+		// cycled through all players which means the suggestion must be correct!
+		
 	}
 
 	/**
@@ -264,67 +280,7 @@ public class Controller {
 				new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
 	}
 
-	/**
-	 * Goes through all players to see if they can refute the hypothesis
-	 * @param hypothesiser
-	 * @param hypothesis
-	 * @return true if murder hypothesis is correct, false if not
-	 */
-	private boolean testMurderSuggestion(Player hypothesiser, MurderHypothesis hypothesis){
-
-		for (int i = 0; i < game.getNumberOfPlayers(); i++){
-			hypothesiser = game.getPlayerToLeft(hypothesiser);
-
-			final String HYPOT_CONFIRM_TITLE = hypothesiser.getCharacter().toString()+", can you refute this accusation?";
-			JPanel hypotPanel = new JPanel();
-			hypotPanel.setLayout(new BorderLayout());
-
-			JPanel cardsPanel = new JPanel();
-			cardsPanel.setLayout(new FlowLayout());
-			JLabel characterLabel = new JLabel(hypothesis.getCharacter().toString());
-			JLabel weaponLabel = new JLabel(hypothesis.getWeapon().toString());
-			JLabel roomLabel = new JLabel(hypothesis.getRoom().toString());
-			cardsPanel.add(characterLabel);
-			cardsPanel.add(weaponLabel);
-			cardsPanel.add(roomLabel);
-			hypotPanel.add(cardsPanel, BorderLayout.NORTH);
-
-			// displays whether the user can refute or not
-			JLabel result = new JLabel();
-			hypotPanel.add(result);
-
-			Set<Card> matchingCards = hypothesis.whichCardsMatch(hypothesiser.getCards());
-
-			if (!matchingCards.isEmpty()){
-				// player has card/s to refute the solution
-				result.setText("You can refute this solution");
-				// notify player of card/s they have to refute the solution
-				for (Card match : matchingCards){
-					JLabel toEdit = null;
-					if (match instanceof CharacterCard){
-						toEdit = characterLabel;
-					}
-					if (match instanceof WeaponCard){
-						toEdit = weaponLabel;
-					}
-					if (match instanceof RoomCard){
-						toEdit = roomLabel;
-					}
-					final String OWNERSHIP_NOTIFY = "\n<YOU HAVE>";
-					toEdit.setText(toEdit.getText()+OWNERSHIP_NOTIFY);
-				}
-				JOptionPane.showMessageDialog(null, hypotPanel, HYPOT_CONFIRM_TITLE, JOptionPane.OK_OPTION);
-				return false; // end
-			}
-			else {
-				// player has no cards to refute the solution
-				result.setText("You cannot refute this accusation");
-				JOptionPane.showMessageDialog(null, hypotPanel, HYPOT_CONFIRM_TITLE, JOptionPane.OK_OPTION);
-				// continue the accusation confirmation
-			}
-		}
-		return true;
-	}
+	
 
 	public Game getGame(){
 		return game;

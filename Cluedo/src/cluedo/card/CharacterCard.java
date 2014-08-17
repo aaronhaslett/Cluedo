@@ -16,10 +16,11 @@ public class CharacterCard extends Card{
 		this.character = character;
 	}
 
+	@Override
 	public String toString(){
 		return this.getClass().getSimpleName() + " \"" + character.name() + "\"";
 	}
-
+	
 	public Game.Character getCharacter(){
 		return character;
 	}
@@ -41,7 +42,8 @@ public class CharacterCard extends Card{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return image;
+		BufferedImage scaled = Util.imageResize(image, Card.MAX_SCALE_SIZE.width, Card.MAX_SCALE_SIZE.height);
+		return scaled;
 	}
 
 }

@@ -21,7 +21,7 @@ public class RoomCard extends Card{
 	}
 
 	public String toString(){
-		return " \"" + room.name() + "\"";
+		return this.getClass().getSimpleName()+" \"" + room.name() + "\"";
 	}
 
 	@Override

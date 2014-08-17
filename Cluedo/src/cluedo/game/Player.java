@@ -65,6 +65,9 @@ public class Player implements BoardObject {
 		else return false;
 	}
 
+	/**
+	 * @return room the player is in, or null if the player is not in a room
+	 */
 	public Room getRoom() {
 		return room;
 	}

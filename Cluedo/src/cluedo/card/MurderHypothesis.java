@@ -1,6 +1,7 @@
 package cluedo.card;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -52,5 +53,13 @@ public class MurderHypothesis {
 			}
 		}
 		return matching;
+	}
+	
+	public Set<Card> getCards(){
+		Set<Card> cards = new HashSet<Card>();
+		cards.add(character);
+		cards.add(room);
+		cards.add(weapon);
+		return cards;
 	}
 }
