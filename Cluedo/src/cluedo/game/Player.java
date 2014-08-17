@@ -60,8 +60,7 @@ public class Player implements BoardObject {
 
 		Player other = (Player)o;
 
-		if (this.piece.equals(other.getPiece())
-			&& this.position.equals(other.getPosition()))
+		if (this.piece.equals(other.getPiece()))			
 			return true;
 		else return false;
 	}

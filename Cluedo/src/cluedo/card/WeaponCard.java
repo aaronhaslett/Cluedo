@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import cluedo.Main;
 import cluedo.game.Game;
+import cluedo.util.Util;
 
 public class WeaponCard extends Card{
 
@@ -35,7 +35,7 @@ public class WeaponCard extends Card{
 
 	@Override
 	public BufferedImage getBufferedImage(){
-		String path = Main.CARD_IMAGE_PATH + "weapon" + File.separator + weapon.name()+".jpg";
+		String path = Util.CARD_IMAGE_PATH + "weapon" + File.separator + weapon.name()+".jpg";
 		BufferedImage image=null;
 		try {
 			image = ImageIO.read(new File(path));

@@ -18,8 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-
 import javax.swing.event.MouseInputAdapter;
+
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseEvent;
 import java.awt.Point;
@@ -32,22 +32,21 @@ import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
-
 import cluedo.board.*;
 
 public class Controller {
 
+	private static final int MIN_PLAYERS = 3;
+
 	private Game game;
 	private Board board;
 	private Window window;
-	private boolean rolled = false;
 
 	public Controller(){
 		window = new Window(this);
 
 		List<Player> players = playerSelect();
 		board = new Board(players);
-		window.updateBoard(board.getBoardTiles());
 		game = new Game(players);
 
 		window.updatePlayerTurn(game.getWhoseTurn());
@@ -59,7 +58,7 @@ public class Controller {
 	 * The player to the left gets the turn.
 	 * View elements are updated.
 	 */
-	private void nextTurn() {
+	public void nextTurn() {
 		game.nextTurn();
 		window.updatePlayerTurn(game.getWhoseTurn());
 		window.repaint();
@@ -106,8 +105,8 @@ public class Controller {
 				    JOptionPane.QUESTION_MESSAGE, null, new String[]{"next", "done"} , null);
 			if (playerState == DONE_SELECTING){
 
-				// doesn't allow < 2 players
-				if (players.size() < 2){
+				// doesn't allow < 3 players
+				if (players.size() < MIN_PLAYERS){
 					displayErrorBox("Not enough players yet!", "Oi");
 					playerState = STILL_SELECTING;
 					continue;
@@ -324,6 +323,25 @@ public class Controller {
 		return true;
 	}
 
+	public Game getGame(){
+		return game;
+	}
+
+	/**
+	 * PRE: Dice has not been rolled this turn
+	 * POST: Dice will be rolled
+	 */
+	public void rollDice() {
+		if(game.hasRolled()){return;}
+
+		game.rollDice();
+		window.updateDice(game.getDice());
+
+		board.showPaths(game.getDiceValue(), game.getWhoseTurn());
+		game.setRolled(true);
+		window.repaint();
+	}
+
 	public class ExitButtonListener implements ActionListener{
 
 		private final String EXIT_CONFIRM = "Are you sure that you want to exit the best cluedo implementation known?";
@@ -365,14 +383,14 @@ public class Controller {
 			pressedX = (int)e.getX();
 			pressedY = (int)e.getY();
 		}
-	
+
 		public void mouseDragged(MouseEvent e){
 			if(dragging==null){return;}
 
 			dragging.draggingPosition.setLocation(e.getX(), e.getY());
 			window.repaint();
 		}
-	
+
 		public void mouseReleased(MouseEvent e){
 
 			int boardSize = board.getBoardTiles().length+1;
@@ -397,7 +415,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent e) {
 			// give next player the turn, update graphics
 			nextTurn();
-			rolled = false;
+			game.setRolled(false);
 		}
 	}
 
@@ -411,13 +429,17 @@ public class Controller {
 	public class DiceButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(Controller.this.rolled){return;}
-			game.rollDice();
-			System.out.println("Dice value is " + game.getDiceValue());
-
-			board.showPaths(game.getDiceValue(), game.getWhoseTurn());
-			Controller.this.rolled = true;
-			window.repaint();
+			rollDice();
 		}
 	}
+
+	public class SuggestionButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			makeSuggestion(game.getWhoseTurn());
+		}
+
+	}
+
 }

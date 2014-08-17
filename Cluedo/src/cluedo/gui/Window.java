@@ -5,11 +5,13 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import cluedo.board.BoardObject;
 import cluedo.game.Controller;
 import cluedo.game.Player;
+import cluedo.util.TwoDice;
 
 
 public class Window extends JFrame{
@@ -30,6 +32,7 @@ public class Window extends JFrame{
 		setSize(WINDOW_SIZE);
 		setLocation(500, 200); // location on screen that the game starts at.
 		setLayout(new BorderLayout());
+		setLookAndFeel();
 
 		board = new BoardPanel(control);
 		playerUI = new PlayerUIPanel(control);
@@ -47,13 +50,34 @@ public class Window extends JFrame{
 		setVisible(true);
 	}
 
+	private void setLookAndFeel(){
+
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (Exception e) {
+			// look and feel didn't work
+			e.printStackTrace();
+		}
+
+		/*
+		UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+	    for(Window window : this.getWindows()) {
+	        SwingUtilities.updateComponentTreeUI(window);
+	    }*/
+	}
+
 	public void updatePlayerTurn(Player p) {
 		playerUI.updatePlayerTurn(p);
-
 	}
 
 	public void updateBoard(BoardObject[][] b){
 		board.updateBoard(b);
 	}
+
+	public void updateDice(TwoDice dice) {
+		playerUI.updateDice(dice);
+	}
+
+
 
 }

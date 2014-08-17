@@ -10,6 +10,7 @@ import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
+import cluedo.util.TwoDice;
 
 
 public class Game {
@@ -22,11 +23,20 @@ public class Game {
 	private Set<CluedoRoom> rooms;
 	private Set<CluedoWeapon> weapons;*/ // SOON
 
-	private List<Player> players; // List to preserve initial ordering
+	/**
+	 * preserves initial ordering (in order of choosing) of players
+	 */
+	private List<Player> players;
 	private MurderHypothesis murderSolution;
 	private Player turn;
+	/**
+	 * if the dice has been rolled this turn or not
+	 */
+	private boolean diceRolled = false;
 
-	private int diceValue;
+	private int dice1Value;
+	private int dice2Value;
+	private TwoDice dice;
 
 	/**
 	 * Makes a new game
@@ -44,6 +54,7 @@ public class Game {
 
 		this.players = players;
 		setUpCards();
+		dice = new TwoDice();
 		// sets the first player to be the 'turn owner'
 		turn = players.get(0);
 	}
@@ -131,26 +142,42 @@ public class Game {
 		return turn;
 	}
 
+	/**
+	 * generates a value with the same range and distribution as
+	 * the sum of the result of two random dice values
+	 */
 	public void rollDice(){
-		int d1 = (int)(Math.random()*6);
-		int d2 = (int)(Math.random()*6);
-		diceValue = d1 + d2;
+		dice.roll();
 	}
 
 	public int getDiceValue(){
-		return diceValue;
+		return dice.getTotal();
+	}
+
+	public TwoDice getDice(){
+		return dice;
 	}
 
 	public int getNumberOfPlayers(){
 		return players.size();
 	}
-	
+
 	public List<Player> getPlayers(){
 		return players;
 	}
-	
+
 	public MurderHypothesis getMurderSolution(){
 		return murderSolution;
 	}
-	
+
+
+	public boolean hasRolled() {
+		return diceRolled;
+	}
+
+
+	public void setRolled(boolean rolled) {
+		diceRolled = rolled;
+	}
+
 }

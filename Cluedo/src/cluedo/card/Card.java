@@ -8,7 +8,7 @@ public abstract class Card {
 	/**
 	 * width * HEIGHT_RATIO = height
 	 */
-	public static final float HEIGHT_RATIO = 1.7f;
+	public static final float WIDTH_RATIO = 0.60f;
 
 	public abstract BufferedImage getBufferedImage();
 

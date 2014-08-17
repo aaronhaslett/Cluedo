@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import cluedo.Main;
 import cluedo.game.Game;
+import cluedo.util.Util;
 
 
 public class CharacterCard extends Card{
@@ -34,7 +34,7 @@ public class CharacterCard extends Card{
 
 	@Override
 	public BufferedImage getBufferedImage(){
-		String path = Main.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg";
+		String path = Util.CARD_IMAGE_PATH + "character" + File.separator + character.name()+".jpg";
 		BufferedImage image=null;
 		try {
 			image = ImageIO.read(new File(path));
