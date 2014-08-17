@@ -14,7 +14,7 @@ public class Room implements BoardObject{
 	private Rectangle[] rectangles;
 	public Door[] doors;
 	public Warp warp;
-	public Point centralPoint;
+	int[][] playerSlots;
 
 	public Room(String name, int[][][] geometry, Door[] doors){
 		this.name = name;
@@ -34,7 +34,12 @@ public class Room implements BoardObject{
 			minY = Math.min(minY, (int)(r.getY()));
 			maxY = Math.max(maxY, (int)(r.getY() + r.getHeight()));
 		}
-		centralPoint = new Point(minX + (maxX-minX)/2, minY + (maxY-minY)/2);
+
+		//Central point of shape
+		int x = minX + (maxX-minX)/2, y = minY + (maxY-minY)/2;
+		playerSlots = new int[][]{{x-1,y-1},{x,y-1},
+								{x-1,y},  {x,y},
+								{x-1,y+1},{x,y+1}};
 
 		this.doors = doors;
 		for(Door door: doors){
@@ -61,7 +66,6 @@ public class Room implements BoardObject{
 
 	public Rectangle[] getRectangles(){
 		return rectangles;
-
 	}
 
 	public Color getColour(){

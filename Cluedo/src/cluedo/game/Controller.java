@@ -398,6 +398,7 @@ public class Controller {
 			// give next player the turn, update graphics
 			nextTurn();
 			rolled = false;
+			board.clearPath();
 		}
 	}
 
