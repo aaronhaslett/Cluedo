@@ -1,5 +1,4 @@
 package cluedo.game;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +23,7 @@ public class Game {
 	private Set<CluedoWeapon> weapons;*/ // SOON
 
 	private List<Player> players; // List to preserve initial ordering
-	private MurderHypothesis murder;
+	private MurderHypothesis murderSolution;
 	private Player turn;
 
 	private int diceValue;
@@ -77,7 +76,7 @@ public class Game {
 		WeaponCard murderWeapon = weaponCards.get((int) (weaponCards.size()*Math.random()));
 		RoomCard murderRoom = roomCards.get((int) (roomCards.size()*Math.random()));
 
-		murder = new MurderHypothesis(murderer, murderRoom, murderWeapon);
+		murderSolution = new MurderHypothesis(murderer, murderRoom, murderWeapon);
 
 		// remove murder cards from deck
 		characterCards.remove(murderer);
@@ -113,7 +112,7 @@ public class Game {
 	}
 
 	public boolean isAccusationCorrect(MurderHypothesis m){
-		return murder.equals(m);
+		return murderSolution.equals(m);
 	}
 
 	/**
@@ -145,5 +144,13 @@ public class Game {
 	public int getNumberOfPlayers(){
 		return players.size();
 	}
-
+	
+	public List<Player> getPlayers(){
+		return players;
+	}
+	
+	public MurderHypothesis getMurderSolution(){
+		return murderSolution;
+	}
+	
 }
