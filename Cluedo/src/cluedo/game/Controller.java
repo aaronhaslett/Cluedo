@@ -2,10 +2,10 @@ package cluedo.game;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,11 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.event.MouseInputAdapter;
 
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseEvent;
-import java.awt.Point;
-
 import cluedo.board.Board;
+import cluedo.board.BoardObject;
 import cluedo.card.Card;
 import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
@@ -32,8 +29,13 @@ import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.gui.Window;
 import cluedo.piece.CharacterPiece;
-import cluedo.board.*;
 
+/**
+ * @author hardwiwill
+ * This is an attempt to make the 'Controller' section of the MVC design pattern.
+ * Handles all user-input
+ * Contains all Model and View elements
+ */
 public class Controller {
 
 	private static final int MIN_PLAYERS = 3;
@@ -42,6 +44,9 @@ public class Controller {
 	private Board board;
 	private Window window;
 
+	/**
+	 * initialises model and view
+	 */
 	public Controller(){
 		window = new Window(this);
 
@@ -157,7 +162,6 @@ public class Controller {
 	private void makeSuggestion(Player player){
 		Player currentPlayer = game.getWhoseTurn();
 
-		// TEMP ROOM TODO: implement getter for the position of a piece
 		MurderHypothesis suggestion = selectSuggestion(Game.Room.BallRoom);
 
 		if (suggestion == null){
@@ -173,7 +177,7 @@ public class Controller {
 			// TODO: player wins the game, game ends.
 		}
 		else {
-			message = "Suggestion was incorrect! "+player+" has won!";
+			message = "The suggestion has been refuted";
 		}
 
 		JOptionPane.showMessageDialog(null, message);
@@ -342,6 +346,10 @@ public class Controller {
 		window.repaint();
 	}
 
+	/**
+	 * @author hardwiwill
+	 * Listener for the exit button on the top menu
+	 */
 	public class ExitButtonListener implements ActionListener{
 
 		private final String EXIT_CONFIRM = "Are you sure that you want to exit the best cluedo implementation known?";
@@ -355,12 +363,13 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * @author hardwiwill
+	 * Listens for mouse events on the board. Allows user to click squares or drag their character
+	 * pieces to positions on the board.
+	 */
 	public class BoardMouseListener extends MouseInputAdapter{
 		public Player dragging;
-
-		//We need to remember X and Y coords of the mouse press
-		private int pressedX;
-		private int pressedY;
 
 		public void mousePressed(MouseEvent e){
 			if(board.getBoardTiles() == null){return;}
@@ -375,23 +384,20 @@ public class Controller {
 			dragging = clicked instanceof Player && (Player)clicked == game.getWhoseTurn() ? (Player)clicked : null;
 
 			if(dragging!=null){
-				dragging.draggingPosition = new Point(e.getX(), e.getY());
-				int x = (int)dragging.position.getX(), y = (int)dragging.position.getY();
-				if(dragging.room == null){
+				dragging.setDraggingPosition(new Point(e.getX(), e.getY()));
+				int x = (int)dragging.getPosition().getX(), y = (int)dragging.getPosition().getY();
+				if(dragging.getRoom() == null){
 					board.getBoardTiles()[y][x] = null;
 				}else{
-					board.getBoardTiles()[y][x] = dragging.room;
+					board.getBoardTiles()[y][x] = dragging.getRoom();
 				}
 			}
-
-			pressedX = (int)e.getX();
-			pressedY = (int)e.getY();
 		}
 
 		public void mouseDragged(MouseEvent e){
 			if(dragging==null){return;}
 
-			dragging.draggingPosition.setLocation(e.getX(), e.getY());
+			dragging.getDraggingPosition().setLocation(e.getX(), e.getY());
 			window.repaint();
 		}
 
@@ -405,7 +411,7 @@ public class Controller {
 				board.clearPath();
 			}
 			else if (dragging != null){
-				int x = (int)dragging.position.getX(), y = (int)dragging.position.getY();
+				int x = (int)dragging.getPosition().getX(), y = (int)dragging.getPosition().getY();
 				board.getBoardTiles()[y][x] = dragging;
 			}
 			dragging = null;
@@ -414,6 +420,10 @@ public class Controller {
 		}
 	};
 
+	/**
+	 * @author hardwiwill
+	 * Listener for the button which user clicks to end their turn.
+	 */
 	public class EndTurnButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -424,6 +434,10 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * @author hardwiwill
+	 * Listener for 'accuse' button. Causes an accusation to start.
+	 */
 	public class AccusationButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -431,6 +445,10 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * @author hardwiwill
+	 * Listener for the dice button. Causes the dice to roll.
+	 */
 	public class DiceButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -438,6 +456,10 @@ public class Controller {
 		}
 	}
 
+	/**
+	 * @author hardwiwill
+	 * listener for the suggestion button. This begins a suggestion.
+	 */
 	public class SuggestionButtonListener implements ActionListener {
 
 		@Override

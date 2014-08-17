@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import cluedo.board.BoardObject;
@@ -14,6 +13,10 @@ import cluedo.game.Player;
 import cluedo.util.TwoDice;
 
 
+/**
+ * @author hardwiwill
+ * Contains/controls all View/GUI elements
+ */
 public class Window extends JFrame{
 
 	private BoardPanel board;
@@ -24,7 +27,7 @@ public class Window extends JFrame{
 
 	/**
 	 * @param game - game of cluedo
-	 * sets up menu, exit button and starts player select.
+	 * initialises View/GUI elements.
 	 */
 	public Window(Controller control){
 		super("Cluedo");
@@ -50,30 +53,38 @@ public class Window extends JFrame{
 		setVisible(true);
 	}
 
+	/**
+	 * sets the java look and feel for the windows in the game
+	 */
 	private void setLookAndFeel(){
-
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (Exception e) {
 			// look and feel didn't work
 			e.printStackTrace();
 		}
-
-		/*
-		UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-	    for(Window window : this.getWindows()) {
-	        SwingUtilities.updateComponentTreeUI(window);
-	    }*/
 	}
 
+	/**
+	 * @param p
+	 * updates gui elements which change with player turns
+	 */
 	public void updatePlayerTurn(Player p) {
 		playerUI.updatePlayerTurn(p);
 	}
 
+	/**
+	 * @param b
+	 * updates/refreshes the board element
+	 */
 	public void updateBoard(BoardObject[][] b){
 		board.updateBoard(b);
 	}
 
+	/**
+	 * @param dice
+	 * updates View/GUI elements which change with dice
+	 */
 	public void updateDice(TwoDice dice) {
 		playerUI.updateDice(dice);
 	}

@@ -1,20 +1,15 @@
 package cluedo.board;
 
-import java.awt.Rectangle;
 import java.awt.Color;
-import java.awt.Point;
-
-import cluedo.game.Player;
+import java.awt.Rectangle;
 
 public class Room implements BoardObject{
 	private String name;
-	//private WeaponPiece[] weaponPieces;
-	//private CharacterPiece[] characterPieces;
 
 	private Rectangle[] rectangles;
-	public Door[] doors;
-	public Warp warp;
-	int[][] playerSlots;
+	private Door[] doors;
+	private Warp warp;
+	private int[][] playerSlots;
 
 	public Room(String name, int[][][] geometry, Door[] doors){
 		this.name = name;
@@ -41,9 +36,9 @@ public class Room implements BoardObject{
 								{x-1,y},  {x,y},
 								{x-1,y+1},{x,y+1}};
 
-		this.doors = doors;
+		this.setDoors(doors);
 		for(Door door: doors){
-			door.room = this;
+			door.setRoom(this);
 		}
 	}
 
@@ -70,5 +65,25 @@ public class Room implements BoardObject{
 
 	public Color getColour(){
 		return new Color(173, 120, 87);
+	}
+
+	public Warp getWarp() {
+		return warp;
+	}
+
+	public void setWarp(Warp warp) {
+		this.warp = warp;
+	}
+
+	public Door[] getDoors() {
+		return doors;
+	}
+
+	public void setDoors(Door[] doors) {
+		this.doors = doors;
+	}
+
+	public int[][] getPlayerSlots() {
+		return playerSlots;
 	}
 }

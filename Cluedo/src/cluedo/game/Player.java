@@ -12,9 +12,9 @@ import cluedo.board.*;
 public class Player implements BoardObject {
 	private CharacterPiece piece;
 	private Set<Card> cards;
-	public Point position;
-	public Point draggingPosition;//The current point on the screen while being dragged
-	public Room room;//The room the player is currently in.  Null by default.
+	private Point position;
+	private Point draggingPosition;//The current point on the screen while being dragged
+	private Room room;//The room the player is currently in.  Null by default.
 
 	public Player(CharacterPiece piece){
 		cards = new HashSet<Card>();
@@ -60,9 +60,29 @@ public class Player implements BoardObject {
 
 		Player other = (Player)o;
 
-		if (this.piece.equals(other.getPiece()))			
+		if (this.piece.equals(other.getPiece()))
 			return true;
 		else return false;
+	}
+
+	public Room getRoom() {
+		return room;
+	}
+
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+
+	public Point getDraggingPosition() {
+		return draggingPosition;
+	}
+
+	public void setDraggingPosition(Point draggingPosition) {
+		this.draggingPosition = draggingPosition;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
 	}
 
 }

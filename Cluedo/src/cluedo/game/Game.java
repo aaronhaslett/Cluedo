@@ -13,6 +13,11 @@ import cluedo.card.WeaponCard;
 import cluedo.util.TwoDice;
 
 
+/**
+ * @author hardwiwill
+ * Model for a cluedo game
+ * Contains the game state and all Model elements for a game of cluedo
+ */
 public class Game {
 
 	public static enum Character {MissScarlet, ProfPlum, MrsPeacock, RevGreen, ColMustard, MrsWhite};
@@ -39,7 +44,7 @@ public class Game {
 	private TwoDice dice;
 
 	/**
-	 * Makes a new game
+	 * Initialises the game state and model elements.
 	 * PRE: must be 3 <= number of players <= number of characters
 	 * PRE: all characters are unique
 	 * @param players
@@ -122,6 +127,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * @param m
+	 * @return whether the murder hypothesis is the same as the game solution
+	 */
 	public boolean isAccusationCorrect(MurderHypothesis m){
 		return murderSolution.equals(m);
 	}
@@ -170,12 +179,18 @@ public class Game {
 		return murderSolution;
 	}
 
-
+	/**
+	 * @return has the dice rolled?
+	 */
 	public boolean hasRolled() {
 		return diceRolled;
 	}
 
 
+	/**
+	 * set whether the dice has rolled
+	 * @param rolled
+	 */
 	public void setRolled(boolean rolled) {
 		diceRolled = rolled;
 	}

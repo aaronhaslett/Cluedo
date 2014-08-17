@@ -45,7 +45,7 @@ public class BoardPanel extends JPanel{
 		}
 
 		if(bml.dragging != null){
-			Point p = bml.dragging.draggingPosition;
+			Point p = bml.dragging.getDraggingPosition();
 			g.setColor(bml.dragging.getColour());
 			g.fillRect((int)p.getX()-(Board.SQUARE_SIZE/2), (int)p.getY()-(Board.SQUARE_SIZE/2),
 						Board.SQUARE_SIZE, Board.SQUARE_SIZE);

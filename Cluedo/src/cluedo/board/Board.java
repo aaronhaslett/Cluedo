@@ -1,14 +1,9 @@
 package cluedo.board;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-
-import java.util.*;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.List;
+
 import cluedo.game.Player;
 
 public class Board{
@@ -75,44 +70,44 @@ public class Board{
 					}
 				}
 			}
-			for(Door door: room.doors){
+			for(Door door: room.getDoors()){
 				board[door.coords[1]][door.coords[0]] = door;
 			}
-			if(room.warp != null){
-				board[room.warp.coords[1]][room.warp.coords[0]] = room.warp;
+			if(room.getWarp() != null){
+				board[room.getWarp().getCoords()[1]][room.getWarp().getCoords()[0]] = room.getWarp();
 			}
 		}
 
 		for(Player player: players){
 			int[] pos = player.getCharacter().getStartingPosition();
 			board[pos[1]][pos[0]] = player;
-			player.position = new Point(pos[0], pos[1]);
+			player.setPosition(new Point(pos[0], pos[1]));
 		}
 	}
 
 	public boolean move(Player p, Point to){
-		int px = (int)p.position.getX(), py = (int)p.position.getY();
+		int px = (int)p.getPosition().getX(), py = (int)p.getPosition().getY();
 		int tx = (int)to.getX(), ty = (int)to.getY();
 
 		BoardObject ob = board[ty][tx];
 		boolean pathSquare = ob instanceof PathSquare;
-		boolean highlightedDoor = ob instanceof Door && ((Door)ob).highlighted;
+		boolean highlightedDoor = ob instanceof Door && ((Door)ob).isHighlighted();
 
 		if(!(pathSquare || highlightedDoor)){
 			return false;
 		}
 
-		if(p.room != null){
-			removePlayerFromRoom(p, p.room);
+		if(p.getRoom() != null){
+			removePlayerFromRoom(p, p.getRoom());
 		}else{
 			board[py][px] = null;
 		}
 
 		if(highlightedDoor){
-			placePlayerInRoom(p, ((Door)ob).room);
+			placePlayerInRoom(p, ((Door)ob).getRoom());
 		}else{
 			board[ty][tx] = p;
-			p.position.setLocation(to.getX(), to.getY());
+			p.getPosition().setLocation(to.getX(), to.getY());
 		}
 
 		return true;
@@ -120,10 +115,10 @@ public class Board{
 
 	public void showPaths(int diceRoll, Player player){
 		Point p = player.getPosition();
-		if(player.room == null){
+		if(player.getRoom() == null){
 			showPaths(diceRoll, new int[]{(int)p.getX(), (int)p.getY()});
 		}else{
-			for(Door door: player.room.doors){
+			for(Door door: player.getRoom().getDoors()){
 				showPaths(diceRoll, door.coords);
 			}
 		}
@@ -144,27 +139,27 @@ public class Board{
 				showPaths(diceRoll-1, sq);
 			}
 			else if(board[y][x] instanceof Door){
-				((Door)board[y][x]).highlighted = true;
+				((Door)board[y][x]).setHighlighted(true);
 			}
 		}
 	}
 
 	private void placePlayerInRoom(Player p, Room r){
-		for(int[] slot: r.playerSlots){
+		for(int[] slot: r.getPlayerSlots()){
 			if(board[slot[1]][slot[0]] instanceof Room){
 				board[slot[1]][slot[0]] = p;
-				p.room = r;
-				p.position.setLocation(slot[0], slot[1]);
+				p.setRoom(r);
+				p.getPosition().setLocation(slot[0], slot[1]);
 				return;
 			}
 		}
 	}
 
 	private void removePlayerFromRoom(Player p, Room r){
-		for(int[] slot: r.playerSlots){
+		for(int[] slot: r.getPlayerSlots()){
 			if(board[slot[1]][slot[0]] == p){
 				board[slot[1]][slot[0]] = r;
-				p.room = null;
+				p.setRoom(null);
 				return;
 			}
 		}
@@ -176,7 +171,7 @@ public class Board{
 		for(int x=0; x<boardSize; x++){
 			for(int y=0; y<boardSize; y++){
 				if(board[y][x] instanceof Door){
-					((Door)board[y][x]).highlighted = false;
+					((Door)board[y][x]).setHighlighted(false);
 				}else if(board[y][x] instanceof PathSquare){
 					board[y][x] = null;
 				}
