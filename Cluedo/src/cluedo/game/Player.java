@@ -14,6 +14,7 @@ public class Player implements BoardObject {
 	private Set<Card> cards;
 	public Point position;
 	public Point draggingPosition;//The current point on the screen while being dragged
+	public Room room;//The room the player is currently in.  Null by default.
 
 	public Player(CharacterPiece piece){
 		cards = new HashSet<Card>();

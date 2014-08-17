@@ -93,14 +93,21 @@ public class Board{
 	public boolean move(Player p, Point to){
 		int px = (int)p.position.getX(), py = (int)p.position.getY();
 		int tx = (int)to.getX(), ty = (int)to.getY();
-		if(board[ty][tx] instanceof PathSquare ||
-					(board[ty][tx] instanceof Door && ((Door)board[ty][tx]).highlighted)){
-			board[py][px] = null;
-			board[ty][tx] = p;
-			p.position.setLocation(to.getX(), to.getY());
-			return true;
+
+		BoardObject ob = board[ty][tx];
+
+		if(ob instanceof PathSquare){}
+		else if(ob instanceof Door && ((Door)ob).highlighted){ 
+			p.room = ((Door)ob).room;
 		}
-		return false;
+		else{
+			return false;
+		}
+
+		board[py][px] = null;
+		board[ty][tx] = p;
+		p.position.setLocation(to.getX(), to.getY());
+		return true;
 	}
 
 	public void showPaths(int diceRoll, Player player){
@@ -118,7 +125,7 @@ public class Board{
 			int x=sq[0], y=sq[1];
 			if(x<0 || x>23 || y<0 || y>23){continue;}
 
-			if(board[y][x] == null || board[y][x] instanceof PathSquare ){
+			if(board[y][x] == null || board[y][x] instanceof PathSquare){
 				board[y][x] = new PathSquare(sq);
 				showPaths(diceRoll-1, sq);
 			}
@@ -126,6 +133,11 @@ public class Board{
 				((Door)board[y][x]).highlighted = true;
 			}
 		}
+	}
+
+	private void placePlayerInRoom(Player p, Room r){
+		int x=(int)r.centralPoint.getX(), y=(int)r.centralPoint.getY();
+		board[y][x] = p;
 	}
 
 	public void clearPath(){

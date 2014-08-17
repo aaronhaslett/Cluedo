@@ -49,7 +49,6 @@ public class Controller {
 
 		board = new Board(players);
 		window.updateBoard(board.getBoardTiles());
-		//window.repaint();
 
 		game = new Game(players);
 
@@ -343,6 +342,10 @@ public class Controller {
 	public class BoardMouseListener extends MouseInputAdapter{
 		public Player dragging;
 
+		//We need to remember X and Y coords of the mouse press
+		private int pressedX;
+		private int pressedY;
+
 		public void mousePressed(MouseEvent e){
 			if(board.getBoardTiles() == null){return;}
 
@@ -351,11 +354,18 @@ public class Controller {
 			int squareY = (int)(e.getY()/boardSize);
 
 			BoardObject clicked = board.getBoardTiles()[squareY][squareX];
-			dragging = clicked instanceof Player ? (Player)clicked : null;
+
+			//Is the user dragging a player and is that player the one whose turn it is?
+			dragging = clicked instanceof Player && (Player)clicked == game.getWhoseTurn() ? (Player)clicked : null;
 
 			if(dragging!=null){
 				dragging.draggingPosition = new Point(e.getX(), e.getY());
+				int x = (int)dragging.position.getX(), y = (int)dragging.position.getY();
+				board.getBoardTiles()[y][x] = null;
 			}
+
+			pressedX = (int)e.getX();
+			pressedY = (int)e.getY();
 		}
 	
 		public void mouseDragged(MouseEvent e){
@@ -366,17 +376,20 @@ public class Controller {
 		}
 	
 		public void mouseReleased(MouseEvent e){
-			if(dragging == null){return;}
 
 			int boardSize = board.getBoardTiles().length+1;
 			int squareX = (int)(e.getX()/boardSize);
 			int squareY = (int)(e.getY()/boardSize);
 
-			if((board.move(dragging, new Point(squareX, squareY)))){
+			if((board.move(game.getWhoseTurn(), new Point(squareX, squareY)))){
 				board.clearPath();
 			}
-
+			else if (dragging != null){
+				int x = (int)dragging.position.getX(), y = (int)dragging.position.getY();
+				board.getBoardTiles()[y][x] = dragging;
+			}
 			dragging = null;
+
 			window.repaint();
 		}
 	};

@@ -14,9 +14,9 @@ public class Door implements BoardObject{
 
 	public Color getColour(){
 		if(highlighted){
-			return new Color(170,240,65);
+			return new Color(237, 242, 201);
 		}else{
-			return Color.blue;
+			return new Color(159, 169, 85);
 		}
 	}
 }
