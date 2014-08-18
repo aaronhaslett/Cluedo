@@ -38,10 +38,9 @@ public class PlayerUIPanel extends JPanel{
 
 	public static final int PANEL_HEIGHT = 220;
 	public static final Dimension DICE_SIZE = new Dimension(50,100);
-	public static final int CARD_WIDTH = 160;
+	public static final int CARD_WIDTH = 170;
 
-	public final static Dimension UI_PANEL_SIZE;
-
+	public static Dimension UI_PANEL_SIZE;
 
 	private JLabel playerNameLabel;
 	private JPanel cardPanel;
