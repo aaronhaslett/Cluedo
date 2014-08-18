@@ -8,7 +8,7 @@ public class PathSquare implements BoardObject{
 		this.setCoords(coords);
 	}
 
-	public Color getColour(){return Color.lightGray;}
+	public Color getColour(){return new Color(120,180,148);}
 
 	public int[] getCoords() {
 		return coords;

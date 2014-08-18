@@ -1,11 +1,11 @@
 package cluedo.board;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.List;
 
 import cluedo.game.Game;
 import cluedo.game.Player;
+import cluedo.util.Point;
 
 public class Board{
 

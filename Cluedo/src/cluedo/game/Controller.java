@@ -1,7 +1,6 @@
 package cluedo.game;
 
 import java.awt.FlowLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -23,6 +22,7 @@ import cluedo.card.WeaponCard;
 import cluedo.gui.Dialogs;
 import cluedo.gui.Dialogs.CharacterSelect;
 import cluedo.gui.Window;
+import cluedo.util.Point;
 
 /**
  * @author hardwiwill
@@ -43,14 +43,14 @@ public class Controller {
 	 * initialises model and view
 	 */
 	public Controller(){
-		window = new Window(this);
 
 		List<Player> players = playerSelect();
 		board = new Board(players);
 		game = new Game(players);
 
+		window = new Window(this, board);
+
 		window.updatePlayerTurn(game.getWhoseTurn());
-		window.updateBoard(board);
 		window.repaint();
 	}
 
@@ -159,7 +159,6 @@ public class Controller {
 	private void removePlayerFromGame(Player loser){
 		nextTurn();
 		game.removePlayerFromGame(loser);
-		window.updateBoard(board);
 		if (game.getNumberOfPlayers() == 1){
 			// if there is only one player left, they win
 			winGame(game.getPlayers().get(0));
@@ -295,50 +294,61 @@ public class Controller {
 		public Player dragging;
 
 		public void mousePressed(MouseEvent e){
+
+			//If the board isn't initialised yet, don't do anything.
 			if(board.getBoardTiles() == null){return;}
 
+			//Find the square that the user clicked on.  If they clicked outside the board, ignore it.
 			int boardSize = board.getBoardTiles().length+1;
 			int squareX = (int)(e.getX()/boardSize);
 			int squareY = (int)(e.getY()/boardSize);
 			if(squareX < 0 || squareX > 23 || squareY < 0 || squareY > 23){return;}
 
+			//Get the board object that was clicked on.
 			BoardObject clicked = board.getBoardTiles()[squareY][squareX];
 
 			//Is the user dragging a player and is it that player's turn?
 			dragging = clicked instanceof Player && (Player)clicked == game.getWhoseTurn() ? (Player)clicked : null;
 
+			//If the user is trying to drag the current player:
 			if(dragging!=null){
+				//Make a point to track the position of the player as it's dragged.
 				dragging.setDraggingPosition(new Point(e.getX(), e.getY()));
-				int x = (int)dragging.getPosition().getX(), y = (int)dragging.getPosition().getY();
-				if(dragging.getRoom() == null){
+
+				//Get the original location of the player and remove the token from the board.
+				int x = dragging.getPosition().getX(), y = dragging.getPosition().getY();
+				if(dragging.getRoom() == null){//If it's not in a room, just null the position
 					board.getBoardTiles()[y][x] = null;
-				}else{
+				}else{//Otherwise, replace the token with a room reference.
 					board.getBoardTiles()[y][x] = dragging.getRoom();
 				}
 			}
 		}
 
 		public void mouseDragged(MouseEvent e){
-			if(dragging==null){return;}
+			if(dragging==null){return;}//If we're not dragging, return.
 
+			//Alter the dragging position of the player token and redraw
 			dragging.getDraggingPosition().setLocation(e.getX(), e.getY());
 			window.repaint();
 		}
 
 		public void mouseReleased(MouseEvent e){
 
+			//Get the board index from the mouseevent
 			int boardSize = board.getBoardTiles().length+1;
 			int squareX = (int)(e.getX()/boardSize);
 			int squareY = (int)(e.getY()/boardSize);
 
+			//Pass the proposed move off to board.move.  If it's successful, clear the board path.
 			if((board.move(game.getWhoseTurn(), new Point(squareX, squareY)))){
 				board.clearPath();
 			}
-			else if (dragging != null){
-				int x = (int)dragging.getPosition().getX(), y = (int)dragging.getPosition().getY();
+			else if (dragging != null){//If the move was invalid, put the player token back where it was
+				int x = dragging.getPosition().getX(), y = dragging.getPosition().getY();
 				board.getBoardTiles()[y][x] = dragging;
 			}
-			dragging = null;
+			dragging = null;//We're not dragging anymore, so null the reference.
 
 			window.repaint();
 		}

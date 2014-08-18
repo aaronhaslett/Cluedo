@@ -37,9 +37,11 @@ import cluedo.util.Util;
 public class PlayerUIPanel extends JPanel{
 
 	public static final int PANEL_HEIGHT = 220;
-	public static final Dimension CARD_PANEL_SIZE = new Dimension(700, PANEL_HEIGHT);
 	public static final Dimension DICE_SIZE = new Dimension(50,100);
-	public static final Dimension UI_PANEL_SIZE = new Dimension(CARD_PANEL_SIZE.width + DICE_SIZE.width, PANEL_HEIGHT);
+	public static final int CARD_WIDTH = 160;
+
+	public final static Dimension UI_PANEL_SIZE;
+
 
 	private JLabel playerNameLabel;
 	private JPanel cardPanel;
@@ -51,6 +53,13 @@ public class PlayerUIPanel extends JPanel{
 	 * @param control
 	 */
 	public PlayerUIPanel(Controller control){
+		int numPlayers = control.getGame().getNumberOfPlayers();
+		int numPlayerCards = 21-3;
+		int maxNumCards = numPlayerCards/numPlayers;
+
+		final Dimension CARD_PANEL_SIZE = new Dimension(CARD_WIDTH*maxNumCards, PANEL_HEIGHT);
+		UI_PANEL_SIZE = new Dimension(CARD_PANEL_SIZE.width + DICE_SIZE.width, PANEL_HEIGHT);
+
 		setPreferredSize(UI_PANEL_SIZE);
 		setLayout(new BorderLayout());
 
