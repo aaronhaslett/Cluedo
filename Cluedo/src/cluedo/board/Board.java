@@ -89,6 +89,7 @@ public class Board{
 	public boolean move(Player p, Point to){
 		int px = (int)p.getPosition().getX(), py = (int)p.getPosition().getY();
 		int tx = (int)to.getX(), ty = (int)to.getY();
+		if(tx < 0 ||tx > 23 || ty < 0 || ty > 23){return false;}
 
 		BoardObject ob = board[ty][tx];
 		boolean pathSquare = ob instanceof PathSquare;

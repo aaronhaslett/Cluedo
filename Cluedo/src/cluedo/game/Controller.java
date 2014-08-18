@@ -272,10 +272,11 @@ public class Controller {
 			int boardSize = board.getBoardTiles().length+1;
 			int squareX = (int)(e.getX()/boardSize);
 			int squareY = (int)(e.getY()/boardSize);
+			if(squareX < 0 || squareX > 23 || squareY < 0 || squareY > 23){return;}
 
 			BoardObject clicked = board.getBoardTiles()[squareY][squareX];
 
-			//Is the user dragging a player and is that player the one whose turn it is?
+			//Is the user dragging a player and is it that player's turn?
 			dragging = clicked instanceof Player && (Player)clicked == game.getWhoseTurn() ? (Player)clicked : null;
 
 			if(dragging!=null){

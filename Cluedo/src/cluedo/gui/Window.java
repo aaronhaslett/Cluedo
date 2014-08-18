@@ -11,6 +11,7 @@ import cluedo.board.BoardObject;
 import cluedo.game.Controller;
 import cluedo.game.Player;
 import cluedo.util.TwoDice;
+import cluedo.board.*;
 
 
 /**
@@ -23,7 +24,11 @@ public class Window extends JFrame{
 	private PlayerUIPanel playerUI;
 	private JMenuBar menuBar;
 
-	public static final Dimension WINDOW_SIZE = new Dimension(850,850);
+	public static final int BOARD_SIZE = Board.SQUARE_SIZE * (Board.SIZE+1);
+	public static final int MENU_PADDING = 25;
+	public static final int WINDOW_WIDTH = Math.max(PlayerUIPanel.UI_PANEL_SIZE.width, BOARD_SIZE);
+	public static final int WINDOW_HEIGHT = PlayerUIPanel.UI_PANEL_SIZE.height + BOARD_SIZE + MENU_PADDING;
+	public static final Dimension WINDOW_SIZE = new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	/**
 	 * @param game - game of cluedo
@@ -59,7 +64,7 @@ public class Window extends JFrame{
 	private void setLookAndFeel(){
 		try {
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-		} catch (Exception e) {
+		} catch (Exception e){
 			// look and feel didn't work
 			e.printStackTrace();
 		}
