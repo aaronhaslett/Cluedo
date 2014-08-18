@@ -82,7 +82,7 @@ public class Window extends JFrame{
 	 * @param b
 	 * updates/refreshes the board element
 	 */
-	public void updateBoard(BoardObject[][] b){
+	public void updateBoard(Board b){
 		board.updateBoard(b);
 	}
 

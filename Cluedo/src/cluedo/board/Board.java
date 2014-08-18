@@ -51,7 +51,11 @@ public class Board{
 	private static Room kitchen = new Room(Game.Room.Kitchen,
 								new int[][][]{{{18,18},{23,23}}},
 								new Door[]{ new Door(new int[]{19,18}, "N" )});
-	public static Room[] rooms = {study, hall, lounge, library, billiardRoom, diningRoom, conservatory, ballroom, kitchen};
+	private static Room cellar = new Room(Game.Room.Cellar,
+								new int[][][]{{{9,8},{13,14}}},
+								new Door[]{});
+
+	public static Room[] rooms = {study, hall, lounge, library, billiardRoom, diningRoom, conservatory, ballroom, kitchen, cellar};
 
 	private static List<Player> players;
 
@@ -94,8 +98,9 @@ public class Board{
 		BoardObject ob = board[ty][tx];
 		boolean pathSquare = ob instanceof PathSquare;
 		boolean highlightedDoor = ob instanceof Door && ((Door)ob).isHighlighted();
+		boolean warp = ob instanceof Warp && (Warp)ob == p.getRoom().getWarp();
 
-		if(!(pathSquare || highlightedDoor)){
+		if(!(pathSquare || highlightedDoor || warp)){
 			return false;
 		}
 
@@ -105,8 +110,9 @@ public class Board{
 			board[py][px] = null;
 		}
 
-		if(highlightedDoor){
-			placePlayerInRoom(p, ((Door)ob).getRoom());
+		if(highlightedDoor || warp){
+			Room destination = warp ? ((Warp)ob).getDestination() : ((Door)ob).getRoom();
+			placePlayerInRoom(p, destination);
 		}else{
 			board[ty][tx] = p;
 			p.getPosition().setLocation(to.getX(), to.getY());

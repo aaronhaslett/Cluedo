@@ -50,7 +50,7 @@ public class Controller {
 		game = new Game(players);
 
 		window.updatePlayerTurn(game.getWhoseTurn());
-		window.updateBoard(board.getBoardTiles());
+		window.updateBoard(board);
 		window.repaint();
 	}
 
