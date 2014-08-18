@@ -33,6 +33,11 @@ public class GameTests {
 		return new Game(getPlayers(numPlayers));
 	}
 
+	/**
+	 * helper method for makeGame
+	 * @param numPlayers
+	 * @return list
+	 */
 	public List<Player> getPlayers(int numPlayers){
 		List<Player> players = new ArrayList<Player>();
 		for (int i=0; i < numPlayers; i++){
@@ -179,5 +184,15 @@ public class GameTests {
 		int firstPlayerIndex = g.getPlayers().indexOf(first);
 
 		assertEquals(g.getPlayerToLeft(first), g.getPlayers().get(firstPlayerIndex+1%4));
+	}
+
+	/**
+	 * tests the method: isAccusationCorrect
+	 */
+	@Test
+	public void testisAccusationCorrect(){
+		Game g = makeGame(4);
+		MurderHypothesis murder = g.getMurderSolution();
+		assertTrue(g.isAccusationCorrect(murder));
 	}
 }

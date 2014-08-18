@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import cluedo.card.Card;
-import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
 import cluedo.game.Game;
 import cluedo.game.Player;
@@ -24,7 +23,7 @@ import cluedo.piece.CharacterPiece;
 
 /**
  * @author will
- * View elements
+ * View dialog elements
  */
 public class Dialogs {
 
@@ -220,7 +219,10 @@ public class Dialogs {
 
 			// if no buttons are selected.
 			if (buttonSelected == null){
-				Dialogs.showMessageBox("Oi", "Not enough players yet!");
+				if (response == NEXT_CHARACTER){
+					Dialogs.showMessageBox("Oi", "Must select a player");
+				}
+				return response;
 			}
 
 			// add player to the game

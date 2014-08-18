@@ -1,5 +1,9 @@
 package cluedo.util;
 
+/**
+ * @author hardwiwill
+ * Point in java SE was inadequate for this project.
+ */
 public class Point{
 	private int x, y;
 
