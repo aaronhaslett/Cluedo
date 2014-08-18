@@ -159,7 +159,7 @@ public class Controller {
 	private void removePlayerFromGame(Player loser){
 		nextTurn();
 		game.removePlayerFromGame(loser);
-		window.updateBoard(board.getBoardTiles());
+		window.updateBoard(board);
 		if (game.getNumberOfPlayers() == 1){
 			// if there is only one player left, they win
 			winGame(game.getPlayers().get(0));
