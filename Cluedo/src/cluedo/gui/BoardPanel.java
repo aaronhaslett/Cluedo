@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 import java.awt.Point;
+import java.awt.Font;
 
 import cluedo.board.*;
 import cluedo.game.*;
@@ -17,6 +18,7 @@ import cluedo.piece.*;
 public class BoardPanel extends JPanel{
 
 	private BoardObject[][] boardTiles;
+	private Board board;
 	private Controller.BoardMouseListener bml;
 
 	public BoardPanel(Controller control){
@@ -54,9 +56,21 @@ public class BoardPanel extends JPanel{
 			g.fillRect((int)p.getX()-(Board.SQUARE_SIZE/2), (int)p.getY()-(Board.SQUARE_SIZE/2),
 						Board.SQUARE_SIZE, Board.SQUARE_SIZE);
 		}
+
+		g.setFont(new Font("Times New Roman", Font.BOLD, 15));
+
+		for(Room r: board.rooms){
+			int x = (int)r.getCentralPoint()[0] * Board.SQUARE_SIZE, y=(int)r.getCentralPoint()[1] * Board.SQUARE_SIZE;
+			String label = r.getName().name();
+
+			x -= g.getFontMetrics().stringWidth(label)/2;
+			y += g.getFontMetrics().getHeight();
+			g.drawString(label, x, y); 
+		}
 	}
 
-	public void updateBoard(BoardObject[][] board){
-		this.boardTiles = board;
+	public void updateBoard(Board board){
+		this.board = board;
+		this.boardTiles = board.getBoardTiles();
 	}
 }

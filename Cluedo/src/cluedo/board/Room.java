@@ -2,6 +2,7 @@ package cluedo.board;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.Point;
 
 import cluedo.game.Game;
 
@@ -12,6 +13,7 @@ public class Room implements BoardObject{
 	private Door[] doors;
 	private Warp warp;
 	private int[][] playerSlots;
+	private double[] centralPoint;
 
 	public Room(Game.Room name, int[][][] geometry, Door[] doors){
 		this.name = name;
@@ -24,16 +26,20 @@ public class Room implements BoardObject{
 										  rect[1][0]-rect[0][0]+1,  rect[1][1]-rect[0][1]+1);
 		}
 
-		int minX=25, maxX=0, minY=25, maxY=0;
+		double minX=2500d, maxX=0d, minY=2500d, maxY=0d;
 		for(Rectangle r : rectangles){
-			minX = Math.min(minX, (int)(r.getX()));
-			maxX = Math.max(maxX, (int)(r.getX() + r.getWidth()));
-			minY = Math.min(minY, (int)(r.getY()));
-			maxY = Math.max(maxY, (int)(r.getY() + r.getHeight()));
+			minX = Math.min(minX, r.getX());
+			maxX = Math.max(maxX, r.getX() + r.getWidth());
+			minY = Math.min(minY, r.getY());
+			maxY = Math.max(maxY, r.getY() + r.getHeight());
 		}
 
 		//Central point of shape
-		int x = minX + (maxX-minX)/2, y = minY + (maxY-minY)/2;
+		double px = minX + (maxX-minX)/2d, py = minY + (maxY-minY)/2d;
+		centralPoint = new double[]{px, py};
+
+		int x = (int)px, y = (int)py;
+
 		playerSlots = new int[][]{{x-1,y-1},{x,y-1},
 								{x-1,y},  {x,y},
 								{x-1,y+1},{x,y+1}};
@@ -59,6 +65,10 @@ public class Room implements BoardObject{
 			}
 		}
 		return false;
+	}
+
+	public double[] getCentralPoint(){
+		return centralPoint;
 	}
 
 	public Rectangle[] getRectangles(){
