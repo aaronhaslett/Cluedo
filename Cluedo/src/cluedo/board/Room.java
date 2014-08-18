@@ -2,9 +2,9 @@ package cluedo.board;
 
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.Point;
 
 import cluedo.game.Game;
+import cluedo.util.Point;
 
 public class Room implements BoardObject{
 	private Game.Room name;

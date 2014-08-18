@@ -1,12 +1,12 @@
 package cluedo.game;
 import java.awt.Color;
-import java.awt.Point;
-import java.util.HashSet;
 import java.util.Set;
 
 import cluedo.card.Card;
 import cluedo.piece.CharacterPiece;
 import cluedo.board.*;
+import cluedo.util.Point;
+import java.util.HashSet;
 
 
 public class Player implements BoardObject {
