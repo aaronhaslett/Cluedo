@@ -226,7 +226,9 @@ public class Dialogs {
 			// add player to the game
 			Game.Character characterSelected = Game.Character.valueOf(buttonSelected.getActionCommand());
 			CharacterPiece piece = new CharacterPiece(characterSelected);
-			players.add(new Player(piece));
+			if (response == NEXT_CHARACTER){
+				players.add(new Player(piece));
+			}
 			return response;
 		}
 

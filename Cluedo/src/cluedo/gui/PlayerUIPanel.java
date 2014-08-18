@@ -112,7 +112,7 @@ public class PlayerUIPanel extends JPanel{
 
 		cardPanel.removeAll();
 
-		final int CARD_VERT_BORDER_GAP = 35;
+		final int CARD_VERT_BORDER_GAP = 30;
 		final int CARD_HEIGHT = cardPanel.getSize().height - CARD_VERT_BORDER_GAP;
 		final int CARD_WIDTH = (int)(CARD_HEIGHT*Card.WIDTH_RATIO);
 

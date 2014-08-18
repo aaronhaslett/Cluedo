@@ -57,8 +57,10 @@ public class Board{
 
 	public static Room[] rooms = {study, hall, lounge, library, billiardRoom, diningRoom, conservatory, ballroom, kitchen, cellar};
 
-	private static List<Player> players;
-
+	/**
+	 * @param players
+	 * initialises all board objects
+	 */
 	public Board(List<Player> players){
 		//Add warps.
 		study.setWarp(new int[]{0,3}, kitchen);
@@ -90,6 +92,11 @@ public class Board{
 		}
 	}
 
+	/**
+	 * @param p
+	 * @param to
+	 * @return whether the player can move to 'to' location
+	 */
 	public boolean move(Player p, Point to){
 		int px = (int)p.getPosition().getX(), py = (int)p.getPosition().getY();
 		int tx = (int)to.getX(), ty = (int)to.getY();
@@ -121,6 +128,11 @@ public class Board{
 		return true;
 	}
 
+	/**
+	 * @param diceRoll
+	 * @param player
+	 * display all paths
+	 */
 	public void showPaths(int diceRoll, Player player){
 		Point p = player.getPosition();
 		if(player.getRoom() == null){
@@ -132,6 +144,11 @@ public class Board{
 		}
 	}
 
+	/**
+	 * @param diceRoll
+	 * @param player
+	 * display all paths
+	 */
 	private void showPaths(int diceRoll, int[] position){
 		if(diceRoll == 0){return;}
 
@@ -152,6 +169,11 @@ public class Board{
 		}
 	}
 
+	/**
+	 * @param p
+	 * @param r
+	 * changes the position of a character to be in the middle of a room
+	 */
 	private void placePlayerInRoom(Player p, Room r){
 		for(int[] slot: r.getPlayerSlots()){
 			if(board[slot[1]][slot[0]] instanceof Room){
@@ -163,6 +185,11 @@ public class Board{
 		}
 	}
 
+	/**
+	 * @param p
+	 * @param r
+	 * changes a player's position to be outside of a room
+	 */
 	private void removePlayerFromRoom(Player p, Room r){
 		for(int[] slot: r.getPlayerSlots()){
 			if(board[slot[1]][slot[0]] == p){
@@ -173,6 +200,9 @@ public class Board{
 		}
 	}
 
+	/**
+	 *
+	 */
 	public void clearPath(){
 		int boardSize = board.length;
 
