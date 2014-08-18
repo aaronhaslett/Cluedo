@@ -21,7 +21,7 @@ import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.gui.Dialogs;
-import cluedo.gui.Dialogs.PlayerSelect;
+import cluedo.gui.Dialogs.CharacterSelect;
 import cluedo.gui.Window;
 
 /**
@@ -72,23 +72,23 @@ public class Controller {
 	 */
 	private List<Player> playerSelect() {
 
-		Dialogs.PlayerSelect playerSelect = new PlayerSelect();
-		int state = Dialogs.PlayerSelect.NEXT_CHARACTER;
+		Dialogs.CharacterSelect playerSelect = new CharacterSelect();
+		int state = Dialogs.CharacterSelect.NEXT_CHARACTER;
 
 		// each user picks their character
-		while (state != Dialogs.PlayerSelect.FINISH_CHOOSING){
+		while (state != Dialogs.CharacterSelect.FINISH_CHOOSING){
 
 			state = playerSelect.showPlayerSelect();
 
-			if (state == Dialogs.PlayerSelect.FINISH_CHOOSING){
+			if (state == Dialogs.CharacterSelect.FINISH_CHOOSING){
 				// doesn't allow < 3 players
 				if (playerSelect.getNumberOfPlayers() < MIN_PLAYERS){
-					Dialogs.displayErrorBox("Oi", "Not enough players yet!");
-					state = Dialogs.PlayerSelect.NEXT_CHARACTER;
+					Dialogs.showMessageBox("Oi", "Not enough players yet!");
+					state = Dialogs.CharacterSelect.NEXT_CHARACTER;
 					continue;
 				}
 			}
-			else if (state == Dialogs.PlayerSelect.NEXT_CHARACTER &&
+			else if (state == Dialogs.CharacterSelect.NEXT_CHARACTER &&
 					playerSelect.getNumberOfPlayers() > MAX_PLAYERS){
 				// if all six characters have been selected, end character select
 				break;
@@ -99,6 +99,8 @@ public class Controller {
 
 	/**
 	 * Makes dialog boxes to go through murder suggestion process.
+	 * Cycles through all players to see if they can refute the suggestion
+	 * Displays the refuting card and player OR if suggestion was correct, ends the game.
 	 * @param p: player to make suggestion
 	 */
 	private void makeSuggestion(Player suggester){
@@ -116,6 +118,7 @@ public class Controller {
 		}
 		// else proceed with suggestion
 		Player currentPlayer = game.getPlayerToLeft(suggester);
+		// cycle through all player
 		for (int playerCount = 0; playerCount < game.getNumberOfPlayers()-1; playerCount++){
 
 			List<Card> matchingCards = new ArrayList<Card>();
@@ -135,7 +138,32 @@ public class Controller {
 		}
 
 		// cycled through all players which means the suggestion must be correct!
+		winGame(currentPlayer);
+	}
 
+	/**
+	 * @param winner
+	 * Causes the game to be won by winner
+	 */
+	private void winGame(Player winner) {
+		Dialogs.showGameWonMessage(winner);
+		System.exit(0);
+	}
+
+	/**
+	 * @param loser
+	 * removes a player from the game
+	 * if there is only one player left, the remaining player wins
+	 * TODO: remove visual
+	 */
+	private void removePlayerFromGame(Player loser){
+		nextTurn();
+		game.removePlayerFromGame(loser);
+		window.updateBoard(board.getBoardTiles());
+		if (game.getNumberOfPlayers() == 1){
+			// if there is only one player left, they win
+			winGame(game.getPlayers().get(0));
+		}
 	}
 
 	/**
@@ -153,17 +181,18 @@ public class Controller {
 		// else proceed with accusation
 
 		// test the hypothesis
-		String message = null;
 		if (game.isAccusationCorrect(accusation)){
-			message = "Accusation was correct! "+player+" has won!";
-			// TODO: player wins the game, game ends.
+			final String WIN_MESSAGE = "Accusation was correct! "+player+" has won!";
+			winGame(player);
+			Dialogs.showMessageBox("Right!", WIN_MESSAGE);
 		}
 		else {
-			message = "Accusation was wrong!" + player+" is out of the game!";
-			// TODO: player is out of the game.
+			final String LOSE_MESSAGE = "Accusation was wrong!" + player+" is out of the game!";
+			removePlayerFromGame(player);
+			Dialogs.showMessageBox("Wrong!", LOSE_MESSAGE);
 		}
 
-		JOptionPane.showMessageDialog(null, message);
+
 	}
 
 	private MurderHypothesis selectSuggestion(Game.Room currentRoom) {
@@ -202,7 +231,6 @@ public class Controller {
 		JComboBox<Game.Character> murdererSelect = new JComboBox<Game.Character>(Game.Character.values());
 		JComboBox<Game.Weapon> weaponSelect = new JComboBox<Game.Weapon>(Game.Weapon.values());
 		JComboBox<Game.Room> roomSelect = new JComboBox<Game.Room>(Game.Room.values());
-
 
 		optionPanel.add(murdererSelect);
 		optionPanel.add(weaponSelect);
@@ -259,7 +287,7 @@ public class Controller {
 	}
 
 	/**
-	 * @author hardwiwill
+	 * @author aaron
 	 * Listens for mouse events on the board. Allows user to click squares or drag their character
 	 * pieces to positions on the board.
 	 */

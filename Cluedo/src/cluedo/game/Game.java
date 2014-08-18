@@ -151,6 +151,10 @@ public class Game {
 		return turn;
 	}
 
+	public void removePlayerFromGame(Player p){
+		players.remove(p);
+	}
+
 	/**
 	 * generates a value with the same range and distribution as
 	 * the sum of the result of two random dice values

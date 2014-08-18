@@ -24,8 +24,7 @@ import cluedo.piece.CharacterPiece;
 
 /**
  * @author will
- * View element
- * Cycles through all players to see if any can refute a suggestion by a player
+ * View elements
  */
 public class Dialogs {
 
@@ -149,18 +148,27 @@ public class Dialogs {
 	 * @param message
 	 * @param title
 	 */
-	public static void displayErrorBox(String title, String message) {
+	public static void showMessageBox(String title, String message) {
 		JOptionPane.showMessageDialog(null,	message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
-	public static class PlayerSelect {
+
+	/**
+	 * @author hardwiwill
+	 * View element for the character select interface
+	 * Used to interface with all players to have them choose a character each
+	 *
+	 * This is a class, not a method, because the character select interface has more
+	 * complicated user-input than the other showdialog methods in this class.
+	 */
+	public static class CharacterSelect {
 
 		public static final int NEXT_CHARACTER = 0;
 		public static final int FINISH_CHOOSING = 1;
 
 		private List<Player> players;
 
-		public PlayerSelect(){
+		public CharacterSelect(){
 			players = new ArrayList<Player>();
 		}
 
@@ -169,7 +177,8 @@ public class Dialogs {
 		 * @return the response from the player:
 		 * 	0 = next character
 		 * 	1 = done choosing
-		 * 	2 = no buttons selected
+		 *
+		 * shows a dialog which requests the player to choose a character
 		 */
 		public int showPlayerSelect() {
 			JPanel panel = new JPanel();
@@ -211,7 +220,7 @@ public class Dialogs {
 
 			// if no buttons are selected.
 			if (buttonSelected == null){
-				Dialogs.displayErrorBox("Oi", "Not enough players yet!");
+				Dialogs.showMessageBox("Oi", "Not enough players yet!");
 			}
 
 			// add player to the game
