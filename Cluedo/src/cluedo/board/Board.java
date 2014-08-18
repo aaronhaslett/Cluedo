@@ -111,11 +111,7 @@ public class Board{
 			return false;
 		}
 
-		if(p.getRoom() != null){
-			removePlayerFromRoom(p, p.getRoom());
-		}else{
-			board[py][px] = null;
-		}
+		removePlayerFromBoard(p);
 
 		if(highlightedDoor || warp){
 			Room destination = warp ? ((Warp)ob).getDestination() : ((Door)ob).getRoom();
@@ -174,7 +170,7 @@ public class Board{
 	 * @param r
 	 * changes the position of a character to be in the middle of a room
 	 */
-	private void placePlayerInRoom(Player p, Room r){
+	public void placePlayerInRoom(Player p, Room r){
 		for(int[] slot: r.getPlayerSlots()){
 			if(board[slot[1]][slot[0]] instanceof Room){
 				board[slot[1]][slot[0]] = p;
@@ -190,14 +186,20 @@ public class Board{
 	 * @param r
 	 * changes a player's position to be outside of a room
 	 */
-	private void removePlayerFromRoom(Player p, Room r){
-		for(int[] slot: r.getPlayerSlots()){
-			if(board[slot[1]][slot[0]] == p){
-				board[slot[1]][slot[0]] = r;
-				p.setRoom(null);
-				return;
+	public void removePlayerFromBoard(Player p){
+		if(p.getRoom() != null){
+			for(int[] slot: p.getRoom().getPlayerSlots()){
+				if(board[slot[1]][slot[0]] == p){
+					board[slot[1]][slot[0]] = p.getRoom();
+					p.setRoom(null);
+					return;
+				}
 			}
+		}else{
+			int x = p.getPosition().getX(), y = p.getPosition().getY();
+			board[y][x] = null;
 		}
+
 	}
 
 	/**

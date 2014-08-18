@@ -119,6 +119,26 @@ public class Controller {
 			// player cancelled the suggestion
 			return;
 		}
+
+		Player suggestedPlayer = null;
+		for(Player p: game.getPlayers()){
+			if(p.getPiece().getCharacter() == suggestion.getCharacter().getCharacter()){
+				suggestedPlayer = p;
+				break;
+			}
+		}
+
+		cluedo.board.Room suggestedRoom = null;
+		for(cluedo.board.Room r: board.rooms){
+			if(r.getName() == suggestion.getRoom().getRoom()){
+				suggestedRoom = r;
+				break;
+			}
+		}
+
+		board.removePlayerFromBoard(suggestedPlayer);
+		board.placePlayerInRoom(suggestedPlayer, suggestedRoom);
+
 		// else proceed with suggestion
 		Player currentPlayer = game.getPlayerToLeft(suggester);
 		// cycle through all player
@@ -157,7 +177,6 @@ public class Controller {
 	 * @param loser
 	 * removes a player from the game
 	 * if there is only one player left, the remaining player wins
-	 * TODO: remove visual
 	 */
 	private void removePlayerFromGame(Player loser){
 		nextTurn();
@@ -167,12 +186,7 @@ public class Controller {
 			winGame(game.getPlayers().get(0));
 		}
 
-		int x = loser.getPosition().getX(), y = loser.getPosition().getY();
-		if(loser.getRoom() != null){
-			board.getBoardTiles()[y][x] = null;
-		}else{
-			board.getBoardTiles()[y][x] = loser.getRoom();
-		}
+		board.removePlayerFromBoard(loser);
 	}
 
 	/**
