@@ -94,8 +94,9 @@ public class Board{
 		BoardObject ob = board[ty][tx];
 		boolean pathSquare = ob instanceof PathSquare;
 		boolean highlightedDoor = ob instanceof Door && ((Door)ob).isHighlighted();
+		boolean warp = ob instanceof Warp && (Warp)ob == p.getRoom().getWarp();
 
-		if(!(pathSquare || highlightedDoor)){
+		if(!(pathSquare || highlightedDoor || warp)){
 			return false;
 		}
 
@@ -105,8 +106,9 @@ public class Board{
 			board[py][px] = null;
 		}
 
-		if(highlightedDoor){
-			placePlayerInRoom(p, ((Door)ob).getRoom());
+		if(highlightedDoor || warp){
+			Room destination = warp ? ((Warp)ob).getDestination() : ((Door)ob).getRoom();
+			placePlayerInRoom(p, destination);
 		}else{
 			board[ty][tx] = p;
 			p.getPosition().setLocation(to.getX(), to.getY());

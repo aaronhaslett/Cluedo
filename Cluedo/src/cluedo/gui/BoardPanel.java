@@ -37,7 +37,11 @@ public class BoardPanel extends JPanel{
 			for(int x=0; x<Board.SIZE; x++){
 				if(boardTiles[y][x] != null){
 					g.setColor(boardTiles[y][x].getColour());
-					g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+					if(boardTiles[y][x] instanceof Player){
+						g.fillOval(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+					}else{
+						g.fillRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
+					}
 				}
 				g.setColor(Color.BLACK);
 				g.drawRect(x*Board.SQUARE_SIZE, y*Board.SQUARE_SIZE, Board.SQUARE_SIZE, Board.SQUARE_SIZE);
