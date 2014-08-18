@@ -14,7 +14,7 @@ public class ControllerTests {
 	 * checks if the turn is passed on to the next player correctly
 	 */
 	@Test
-	public void testNextTurn(){
+	public void testNextTurnCorrectPlayer(){
 		Controller c = new Controller();
 		Game game = c.getGame();
 		Player currentPlayer = game.getWhoseTurn();
@@ -34,6 +34,18 @@ public class ControllerTests {
 		if (!game.getPlayers().get(firstPlayerIndex).equals(currentPlayer)){
 			fail("doesn't cycle back to start");
 		}
+	}
+
+	/**
+	 *  test is the dice has not been rolled right after a new turn
+	 */
+	@Test
+	public void testNextTurnResetsDice(){
+		Controller c = new Controller();
+		Game game = c.getGame();
+		game.setRolled(true);
+		c.nextTurn();
+		assertFalse(game.hasRolled());
 	}
 
 }

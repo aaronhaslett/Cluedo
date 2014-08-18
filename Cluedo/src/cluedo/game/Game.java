@@ -142,6 +142,7 @@ public class Game {
 	 */
 	public void nextTurn(){
 		turn = getPlayerToLeft(turn);
+		setRolled(false);
 	}
 
 	public Player getPlayerToLeft(Player p) {

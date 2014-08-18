@@ -61,7 +61,6 @@ public class Controller {
 	 */
 	public void nextTurn() {
 		game.nextTurn();
-		game.setRolled(false);
 		window.updatePlayerTurn(game.getWhoseTurn());
 		window.repaint();
 	}
@@ -198,7 +197,7 @@ public class Controller {
 
 	}
 
-	private MurderHypothesis selectSuggestion(Game.Room currentRoom) {
+	public static MurderHypothesis selectSuggestion(Game.Room currentRoom) {
 		final String TITLE = "so how did the murder happen?";
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new FlowLayout());
@@ -226,7 +225,7 @@ public class Controller {
 	 * @param room: restriction to one room or null if no room restriction
 	 * @return a MurderHypothesis containing the relevant cards
 	 */
-	private static MurderHypothesis selectAccusation(){
+	public static MurderHypothesis selectAccusation(){
 		final String TITLE = "so how did the murder happen?";
 		JPanel optionPanel = new JPanel();
 		optionPanel.setLayout(new FlowLayout());

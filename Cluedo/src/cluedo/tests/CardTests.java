@@ -1,6 +1,12 @@
 package cluedo.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -10,6 +16,8 @@ import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
 import cluedo.game.Game;
+import cluedo.game.Player;
+import cluedo.piece.CharacterPiece;
 
 public class CardTests {
 
@@ -67,4 +75,31 @@ public class CardTests {
 		assertFalse(s1.equals(s2));
 	}
 
+	/**
+	 * checks if all the card images
+	 * testing actually crashes if this doesn't pass
+	 */
+	@Test
+	public void testImagesReadCorrectly(){
+
+		try{
+			for (Game.Character character : Game.Character.values()){
+				new CharacterCard(character).getBufferedImage();
+			}
+			for (Game.Room room : Game.Room.values()){
+				if (room == Game.Room.Cellar){
+					// cellar does not have an image
+					continue;
+				}
+				new RoomCard(room).getBufferedImage();
+			}
+			for (Game.Weapon weapon : Game.Weapon.values()){
+				new WeaponCard(weapon).getBufferedImage();
+			}
+		} catch (Exception e){
+			fail("card file reading failed");
+		}
+	}
+
 }
+
