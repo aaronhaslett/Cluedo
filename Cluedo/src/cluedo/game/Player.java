@@ -88,4 +88,8 @@ public class Player implements BoardObject {
 		this.position = position;
 	}
 
+	public String getName() {
+		return piece.getName();
+	}
+
 }

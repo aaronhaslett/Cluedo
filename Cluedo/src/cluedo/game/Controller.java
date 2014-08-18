@@ -1,6 +1,5 @@
 package cluedo.game;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -8,16 +7,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.event.MouseInputAdapter;
 
 import cluedo.board.Board;
@@ -27,9 +20,9 @@ import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
-import cluedo.gui.SuggestDialogs;
+import cluedo.gui.Dialogs;
+import cluedo.gui.Dialogs.PlayerSelect;
 import cluedo.gui.Window;
-import cluedo.piece.CharacterPiece;
 
 /**
  * @author hardwiwill
@@ -40,6 +33,7 @@ import cluedo.piece.CharacterPiece;
 public class Controller {
 
 	private static final int MIN_PLAYERS = 3;
+	private static final int MAX_PLAYERS = Game.Character.values().length;
 
 	private Game game;
 	private Board board;
@@ -77,84 +71,30 @@ public class Controller {
 	 *  > 1 players must be selected before exiting
 	 */
 	private List<Player> playerSelect() {
-		JPanel panel = new JPanel();
-		JLabel chooseText = new JLabel();
-		panel.add(chooseText);
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		ButtonGroup buttongroup = new ButtonGroup();
-		JRadioButton[] buttons = new JRadioButton[6];
 
-
-		List<Player> players = new ArrayList<Player>();
-
-		// makes radio button for each character
-		for (Game.Character c : Game.Character.values()){
-			JRadioButton button = new JRadioButton(c.toString());
-			// sets action command to the ordinal number of the character
-			button.setActionCommand(c.name());
-			buttongroup.add(button);
-			buttons[c.ordinal()] = button;
-			panel.add(button);
-		}
-
-		// initialise first button to be selected
-		buttons[0].setSelected(true);
-
-		final int STILL_SELECTING = 0;
-		final int DONE_SELECTING = 1;
-		int playerState = STILL_SELECTING;
+		Dialogs.PlayerSelect playerSelect = new PlayerSelect();
+		int state = Dialogs.PlayerSelect.NEXT_CHARACTER;
 
 		// each user picks their character
-		while (playerState != DONE_SELECTING){
-			chooseText.setText("Pick character for player: "+players.size());
-			playerState = JOptionPane.showOptionDialog(null, panel,
-				    "Radio Test", JOptionPane.YES_NO_OPTION,
-				    JOptionPane.QUESTION_MESSAGE, null, new String[]{"next", "done"} , null);
-			if (playerState == DONE_SELECTING){
+		while (state != Dialogs.PlayerSelect.FINISH_CHOOSING){
 
+			state = playerSelect.showPlayerSelect();
+
+			if (state == Dialogs.PlayerSelect.FINISH_CHOOSING){
 				// doesn't allow < 3 players
-				if (players.size() < MIN_PLAYERS){
-					displayErrorBox("Not enough players yet!", "Oi");
-					playerState = STILL_SELECTING;
+				if (playerSelect.getNumberOfPlayers() < MIN_PLAYERS){
+					Dialogs.displayErrorBox("Oi", "Not enough players yet!");
+					state = Dialogs.PlayerSelect.NEXT_CHARACTER;
 					continue;
 				}
 			}
-			else if (playerState == STILL_SELECTING){
-				ButtonModel buttonSelected = buttongroup.getSelection();
-
-				// if no buttons are selected.
-				if (buttonSelected == null){
-					displayErrorBox("Hey! Select a character","Oi");
-					continue;
-				}
-
-				// add player to the game
-				Game.Character characterSelected = Game.Character.valueOf(buttonSelected.getActionCommand());
-				CharacterPiece piece = new CharacterPiece(characterSelected);
-				Player p = new Player(piece);
-				players.add(p);
-
-				// disable that character from being selected
-				buttonSelected.setEnabled(false);
-				// select next available character
-				for (JRadioButton button : buttons){
-					if (button.isEnabled()){
-						button.setSelected(true);
-						break;
-					}
-				}
+			else if (state == Dialogs.PlayerSelect.NEXT_CHARACTER &&
+					playerSelect.getNumberOfPlayers() > MAX_PLAYERS){
+				// if all six characters have been selected, end character select
+				break;
 			}
 		}
-		return players;
-	}
-
-	/**
-	 * Pops up a box with a title and displays a message.
-	 * @param message
-	 * @param title
-	 */
-	private void displayErrorBox(String message, String title){
-		JOptionPane.showMessageDialog(null,	message, title, JOptionPane.ERROR_MESSAGE);
+		return playerSelect.getPlayers();
 	}
 
 	/**
@@ -166,7 +106,7 @@ public class Controller {
 		Game.Room room = suggester.getRoom().getName();
 		if (room == null){
 			// player is not in a room
-			SuggestDialogs.showMustBeInRoomWarning();
+			Dialogs.showMustBeInRoomWarning();
 		}
 		MurderHypothesis suggestion = selectSuggestion(room);
 
@@ -177,25 +117,25 @@ public class Controller {
 		// else proceed with suggestion
 		Player currentPlayer = game.getPlayerToLeft(suggester);
 		for (int playerCount = 0; playerCount < game.getNumberOfPlayers()-1; playerCount++){
-			
+
 			List<Card> matchingCards = new ArrayList<Card>();
 			matchingCards.addAll(suggestion.whichCardsMatch(currentPlayer.getCards()));
 			if (matchingCards.isEmpty()){
-				SuggestDialogs.showCantRefuteDialog(currentPlayer, suggestion);
+				Dialogs.showCantRefuteDialog(currentPlayer, suggestion);
 			}
 			else {
 				// player can refute, show dialog asking them to choose which card to refute with
-				Card refuteCard = SuggestDialogs.showCanRefuteDialog(currentPlayer, suggestion, matchingCards);
-				SuggestDialogs.showWasRefutedDialog(suggester, currentPlayer, refuteCard);
+				Card refuteCard = Dialogs.showCanRefuteDialog(currentPlayer, suggestion, matchingCards);
+				Dialogs.showWasRefutedDialog(suggester, currentPlayer, refuteCard);
 				// move onto the next turn
 				nextTurn();
 				return;
 			}
 			currentPlayer = game.getPlayerToLeft(currentPlayer);
 		}
-		
+
 		// cycled through all players which means the suggestion must be correct!
-		
+
 	}
 
 	/**
@@ -280,7 +220,7 @@ public class Controller {
 				new WeaponCard((Game.Weapon)weaponSelect.getSelectedItem()));
 	}
 
-	
+
 
 	public Game getGame(){
 		return game;

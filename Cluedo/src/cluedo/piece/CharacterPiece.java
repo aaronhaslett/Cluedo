@@ -3,6 +3,7 @@ package cluedo.piece;
 import cluedo.game.Game;
 import cluedo.game.Game.Character;
 import cluedo.board.BoardObject;
+
 import java.awt.Color;
 
 public class CharacterPiece implements Piece, BoardObject{
@@ -25,13 +26,13 @@ public class CharacterPiece implements Piece, BoardObject{
 			case MrsPeacock:
 				startingPosition = new int[]{0,18};
 				colour = Color.blue; break;
-			case RevGreen:	
+			case RevGreen:
 				startingPosition = new int[]{9,23};
 				colour = Color.green; break;
-			case ColMustard:	
+			case ColMustard:
 				startingPosition = new int[]{23,7};
 				colour = Color.yellow; break;
-			case MrsWhite:	
+			case MrsWhite:
 				startingPosition = new int[]{14,23};
 				colour = Color.white; break;
 		}
@@ -48,15 +49,19 @@ public class CharacterPiece implements Piece, BoardObject{
 	public String toString(){
 		return character.name();
 	}
-	
+
 	public Game.Character getCharacter(){
 		return character;
 	}
-	
+
 	public boolean equals(Object o){
 		if (!(o instanceof CharacterPiece)){
 			return false;
 		}
 		return this.character.equals(((CharacterPiece)o).getCharacter());
+	}
+
+	public String getName() {
+		return character.name();
 	}
 }

@@ -1,9 +1,11 @@
 package cluedo.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,10 +56,12 @@ public class PlayerUIPanel extends JPanel{
 
 		playerNameLabel = new JLabel("", SwingConstants.CENTER);
 		playerNameLabel.setOpaque(true);
+		playerNameLabel.setFont(new Font(Font.SERIF, Font.PLAIN, 16));
 		add(playerNameLabel, BorderLayout.NORTH);
 
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		buttonPanel.setBackground(Color.white);
 
 		JButton endTurnButton = new JButton("End turn");
 		endTurnButton.addActionListener(control.new EndTurnButtonListener());
@@ -83,6 +87,7 @@ public class PlayerUIPanel extends JPanel{
 		cardPanel = new JPanel();
 		cardPanel.setLayout(new FlowLayout());
 		cardPanel.setPreferredSize(CARD_PANEL_SIZE);
+		cardPanel.setBackground(Color.white);
 		add(cardPanel, BorderLayout.CENTER);
 	}
 
