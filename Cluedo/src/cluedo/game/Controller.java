@@ -166,6 +166,13 @@ public class Controller {
 			// if there is only one player left, they win
 			winGame(game.getPlayers().get(0));
 		}
+
+		int x = loser.getPosition().getX(), y = loser.getPosition().getY();
+		if(loser.getRoom() != null){
+			board.getBoardTiles()[y][x] = null;
+		}else{
+			board.getBoardTiles()[y][x] = loser.getRoom();
+		}
 	}
 
 	/**
