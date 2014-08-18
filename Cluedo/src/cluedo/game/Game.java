@@ -39,8 +39,6 @@ public class Game {
 	 */
 	private boolean diceRolled = false;
 
-	private int dice1Value;
-	private int dice2Value;
 	private TwoDice dice;
 
 	/**
@@ -77,14 +75,18 @@ public class Game {
 		List<WeaponCard> weaponCards = new ArrayList<WeaponCard>();
 		List<RoomCard> roomCards = new ArrayList<RoomCard>();
 
-		for (int i = 0; i < Character.values().length; i++){
-			characterCards.add(new CharacterCard(Character.values()[i]));
+		for (Character character : Character.values()){
+			characterCards.add(new CharacterCard(character));
 		}
-		for (int i = 0; i < Weapon.values().length; i++){
-			weaponCards.add(new WeaponCard(Weapon.values()[i]));
+		for (Weapon weapon : Weapon.values()){
+			weaponCards.add(new WeaponCard(weapon));
 		}
-		for (int i = 0; i < Room.values().length; i++){
-			roomCards.add(new RoomCard(Room.values()[i]));
+		for (Room room : Room.values()){
+			if (room == Room.Cellar){
+				// don't add the cellar to the cards!
+				continue;
+			}
+			roomCards.add(new RoomCard(room));
 		}
 
 		// pick murderer, weapon and room

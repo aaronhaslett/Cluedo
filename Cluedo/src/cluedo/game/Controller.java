@@ -20,6 +20,7 @@ import cluedo.card.CharacterCard;
 import cluedo.card.MurderHypothesis;
 import cluedo.card.RoomCard;
 import cluedo.card.WeaponCard;
+import cluedo.game.Game.Room;
 import cluedo.gui.Dialogs;
 import cluedo.gui.Dialogs.CharacterSelect;
 import cluedo.gui.Window;
@@ -105,11 +106,13 @@ public class Controller {
 	 */
 	private void makeSuggestion(Player suggester){
 
-		Game.Room room = suggester.getRoom().getName();
-		if (room == null){
+		cluedo.board.Room physicalRoom = suggester.getRoom();
+		if (physicalRoom == null){
 			// player is not in a room
 			Dialogs.showMustBeInRoomWarning();
 		}
+		Game.Room room = physicalRoom.getName();
+
 		MurderHypothesis suggestion = selectSuggestion(room);
 
 		if (suggestion == null){
@@ -371,17 +374,6 @@ public class Controller {
 
 	/**
 	 * @author hardwiwill
-	 * Listener for the dice button. Causes the dice to roll.
-	 */
-	public class DiceButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			rollDice();
-		}
-	}
-
-	/**
-	 * @author hardwiwill
 	 * listener for the suggestion button. This begins a suggestion.
 	 */
 	public class SuggestionButtonListener implements ActionListener {
@@ -391,6 +383,17 @@ public class Controller {
 			makeSuggestion(game.getWhoseTurn());
 		}
 
+	}
+
+	/**
+	 * @author hardwiwill
+	 * Listener for the dice button. Causes the dice to roll.
+	 */
+	public class DiceButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			rollDice();
+		}
 	}
 
 }
